@@ -1,0 +1,55 @@
+.card-tab {
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--el-border-color);
+
+  &:not(:has(.is-scrollable)) {
+    padding: var(--spacing-sm);
+  }
+
+  .tabs-menu {
+    :deep(.el-tabs) {
+      .el-tabs__header {
+        height: 30px;
+        border: none;
+        display: unset;
+
+        .el-tabs__nav-wrap {
+          .el-tabs__nav {
+            gap: var(--spacing-md);
+
+            .el-tabs__item {
+              margin: 0;
+              height: 30px;
+              color: var(--el-text-color-primary);
+              border: 1px solid var(--el-border-color);
+              border-radius: 3px;
+
+              .tabs-item {
+                padding-left: var(--spacing-md);
+              }
+
+              .is-icon-close {
+                margin-right: var(--spacing-sm);
+              }
+
+              &:hover {
+                .is-icon-close {
+                  margin-right: var(--spacing-md);
+                }
+              }
+
+              &.is-active {
+                background-color: var(--el-color-primary-light-8);
+              }
+            }
+          }
+
+          .el-tabs__nav-prev,
+          .el-tabs__nav-next {
+            line-height: 34px;
+          }
+        }
+      }
+    }
+  }
+}
