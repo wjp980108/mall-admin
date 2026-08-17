@@ -93,7 +93,7 @@ service.interceptors.response.use(
 
     // 业务状态码非 200：统一构造 RequestError，401 额外触发登出跳转
     if (data.code && data.code !== 200) {
-      const requestError = new RequestError(data.message, data.code, data);
+      const requestError = new RequestError(data.msg, data.code, data);
 
       if (data.code === 401)
         await handleUnauthorized();
@@ -106,7 +106,7 @@ service.interceptors.response.use(
 
     // 是否需要成功提示
     if (options.successMessage) {
-      const messageText = isString(options.successMessage) ? options.successMessage : data.message;
+      const messageText = isString(options.successMessage) ? options.successMessage : data.msg;
       ElMessage.success(messageText);
     }
 

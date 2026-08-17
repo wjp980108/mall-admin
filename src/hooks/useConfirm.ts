@@ -47,7 +47,7 @@ export async function useConfirm<T extends ApiFunc>(
 
   const res = await api(params);
   if (res?.code !== 200)
-    throw new Error(res?.message ?? $t('common.operationFailed'));
+    throw new Error(res?.msg ?? $t('common.operationFailed'));
 
   ElMessage({
     type: 'success',
