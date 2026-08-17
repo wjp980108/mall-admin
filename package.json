@@ -3,41 +3,6 @@
   "type": "module",
   "version": "0.6.0",
   "private": true,
-  "description": "Meet-Admin is an admin management framework built with Vue 3.5, TypeScript and Vite 8, integrating Element Plus, Pinia, UnoCSS and Vue I18n. It ships with dynamic routing, permission-based menus and i18n out of the box, helping teams quickly build admin systems.",
-  "author": {
-    "name": "Meet you",
-    "email": "wjp_github@163.com",
-    "url": "https://blog.wjp.plus"
-  },
-  "license": "MIT",
-  "homepage": "https://admin.wjp.plus",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wjp980108/meet-admin.git"
-  },
-  "bugs": {
-    "url": "https://github.com/wjp980108/meet-admin/issues"
-  },
-  "keywords": [
-    "admin",
-    "meet-admin",
-    "element-plus",
-    "unocss",
-    "typescript",
-    "pinia",
-    "vue3",
-    "vue.js",
-    "vite",
-    "esm",
-    "vueuse",
-    "a-calc",
-    "dayjs",
-    "localforage",
-    "lodash-es",
-    "vue-draggable-plus",
-    "axios",
-    "nprogress"
-  ],
   "engines": {
     "node": ">=24",
     "pnpm": ">=11"
