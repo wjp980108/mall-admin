@@ -1,7 +1,12 @@
 import request from '@/utils/axios';
 
+export interface LoginReq {
+  account: string;
+  password: string;
+}
+
 // 登录
-export function login(data: AnyObj) {
+export function login(data: LoginReq) {
   return request({
     url: '/api/auth/login',
     method: 'post',
@@ -12,14 +17,14 @@ export function login(data: AnyObj) {
 // 获取用户信息
 export function fetchUserInfo() {
   return request<User.CurrentUser>({
-    url: '/api/user',
+    url: '/api/users/user-info',
   });
 }
 
 // 获取用户菜单
 export function fetchUserMenu() {
   return request<Menu.Tree[]>({
-    url: '/api/user/menus',
+    url: '/api/users/user-menus',
   });
 }
 

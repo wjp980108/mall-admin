@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus';
+import type { LoginReq } from '@/api';
 import dayjs from 'dayjs';
 import { login } from '@/api';
 import logo from '@/assets/images/logo.png';
@@ -20,25 +21,20 @@ const userStore = useUserStore();
 const appName = import.meta.env.VITE_APP_NAME;
 const checked = ref(false);
 
-interface State {
-  username: string;
-  password: string;
-}
-
-const state = reactive({
-  username: '',
+const state = reactive<LoginReq>({
+  account: '',
   password: '',
 });
 
 // 获取用户账号
 async function getUserConfig() {
   try {
-    const rss = await storage.getItem<State>(Constant.LoginAccount, '');
+    const rss = await storage.getItem<LoginReq>(Constant.LoginAccount, '');
 
     if (!rss)
       return;
 
-    state.username = rss.username;
+    state.account = rss.account;
     state.password = rss.password;
     checked.value = true;
   }
@@ -51,7 +47,7 @@ onMounted(getUserConfig);
 
 const formRef = ref<FormInstance>();
 const rules: FormRules = {
-  username: [
+  account: [
     { required: true, message: t('page.login.usernameError'), trigger: 'blur' },
   ],
   password: [
@@ -290,8 +286,8 @@ useEventListener('keypress', ({ code }) => {
         </div>
         <!-- 登录表单 -->
         <el-form ref="formRef" class="login-form" :model="state" :rules="rules" size="large" label-position="top">
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="state.username" clearable :placeholder="t('page.login.username')" :prefix-icon="renderIcon('UserFilled')" />
+          <el-form-item label="用户名" prop="account">
+            <el-input v-model="state.account" clearable :placeholder="t('page.login.username')" :prefix-icon="renderIcon('UserFilled')" />
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input
