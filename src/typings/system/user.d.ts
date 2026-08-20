@@ -19,6 +19,6 @@ declare namespace User {
     phone: string;
     email: string | null;
     avatar: string;
-    buttons: string[];
+    permissions: string[];
   }
 }

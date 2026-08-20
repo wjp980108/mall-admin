@@ -16,7 +16,7 @@ export function hasAuth(auth?: string | string[]) {
     return true;
 
   const userStore = useUserStore();
-  const buttons = userStore.userInfo?.buttons ?? [];
+  const buttons = userStore.userInfo?.permissions ?? [];
 
   return isArray(auth) ? auth.some(item => buttons.includes(item)) : buttons.includes(auth);
 }
