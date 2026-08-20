@@ -15,7 +15,7 @@ import { useTableSpan } from './useTableSpan.ts';
 import { isPageData } from './utils.ts';
 
 /** 分页参数字段名，导出数据时可用于 omit 过滤分页参数 */
-export const PAGINATION_KEYS = ['page', 'pageSize'] as const;
+export const PAGINATION_KEYS = ['pageNum', 'pageSize'] as const;
 
 const [PAGE_KEY, PAGE_SIZE_KEY] = PAGINATION_KEYS;
 
