@@ -14,7 +14,7 @@ export interface MenuUpdateStatus {
 // 获取菜单列表
 export function fetchMenuList(params?: MenuListParams) {
   return request<Menu.Tree[]>({
-    url: '/api/menus',
+    url: '/api/menus/tree',
     params,
   });
 }
@@ -34,7 +34,7 @@ export function createMenu(data: MenuCreateForm) {
 // 编辑菜单
 export function updateMenu(data: MenuUpdateForm) {
   return request({
-    url: `/api/menus/${data.id}`,
+    url: '/api/menus',
     method: 'put',
     data,
   }, {
@@ -56,11 +56,9 @@ export function deleteMenu(id: number) {
 // 更新菜单状态
 export function updateMenuStatus(data: MenuUpdateStatus) {
   return request({
-    url: `/api/menus/${data.id}/status`,
+    url: '/api/menus/status',
     method: 'patch',
-    data: {
-      status: data.status,
-    },
+    data,
   }, {
     loading: true,
     successMessage: true,
