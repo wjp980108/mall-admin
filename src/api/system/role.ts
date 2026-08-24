@@ -1,7 +1,7 @@
 import request from '@/utils/axios';
 
 export interface RoleListParams {
-  name: string;
+  roleName: string;
   status?: boolean;
 }
 
@@ -23,7 +23,7 @@ export function fetchRoleList(params?: RoleListParams) {
 // 获取菜单列表
 export function fetchMenuList() {
   return request<Menu.Tree[]>({
-    url: '/api/menus',
+    url: '/api/menus/tree',
     params: {
       status: true,
     },
@@ -45,7 +45,7 @@ export function createRole(data: RoleCreateForm) {
 // 编辑角色
 export function updateRole(data: RoleUpdateForm) {
   return request({
-    url: `/api/roles/${data.id}`,
+    url: '/api/roles',
     method: 'put',
     data,
   }, {
@@ -57,8 +57,9 @@ export function updateRole(data: RoleUpdateForm) {
 // 删除角色
 export function deleteRole(id: number) {
   return request({
-    url: `/api/roles/${id}`,
+    url: '/api/roles',
     method: 'delete',
+    data: { id },
   }, {
     loading: true,
   });
@@ -67,11 +68,9 @@ export function deleteRole(id: number) {
 // 更新角色状态
 export function updateRoleStatus(data: RoleUpdateStatus) {
   return request({
-    url: `/api/roles/${data.id}/status`,
+    url: '/api/roles/status',
     method: 'patch',
-    data: {
-      status: data.status,
-    },
+    data,
   }, {
     loading: true,
     successMessage: true,

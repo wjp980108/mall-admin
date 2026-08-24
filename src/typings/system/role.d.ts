@@ -1,7 +1,7 @@
 declare namespace Role {
   interface Item {
     id: number;
-    name: string;
+    roleName: string;
     status: boolean;
     remark: string;
     menuIds: number[];

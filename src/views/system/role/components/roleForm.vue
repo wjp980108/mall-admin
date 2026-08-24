@@ -30,7 +30,7 @@ watch(showForm, (value) => {
 
 const formRef = useTemplateRef<FormInstance>('formRef');
 const rules: FormRules = {
-  name: { required: true, message: '请输入角色名称', trigger: 'blur' },
+  roleName: { required: true, message: '请输入角色名称', trigger: 'blur' },
   code: { required: true, message: '请输入角色编码', trigger: 'blur' },
 };
 
@@ -85,8 +85,8 @@ async function handleConfirm() {
 <template>
   <app-drawer v-model="showForm" :title size="700" resizable @confirm="handleConfirm">
     <app-form ref="formRef" :model="state" :rules :cols="1">
-      <app-form-item label="角色名称" prop="name">
-        <el-input v-model="state.name" placeholder="请输入角色名称" />
+      <app-form-item label="角色名称" prop="roleName">
+        <el-input v-model="state.roleName" placeholder="请输入角色名称" />
       </app-form-item>
       <app-form-item label="权限" :span="2">
         <app-flex justify="space-between" class="mb-8px">

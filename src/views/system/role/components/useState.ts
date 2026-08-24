@@ -4,7 +4,7 @@ import { useReset } from '@/hooks/useReset';
 export const useState = createSharedComposable(() => {
   const [state, reset] = useReset<Role.Item>(() => ({
     id: 0,
-    name: '',
+    roleName: '',
     status: true,
     remark: '',
     menuIds: [],

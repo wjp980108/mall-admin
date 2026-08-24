@@ -1,24 +1,23 @@
 <script setup lang="tsx">
-import { deleteRole, fetchRoleList, updateRoleStatus } from '@/api/system/role';
-import { renderIcon, useTable } from '@/components';
-import { useConfirm } from '@/hooks/useConfirm';
+import { fetchRoleList, updateRoleStatus } from '@/api/system/role';
+import { useTable } from '@/components';
 import RoleForm from '@/views/system/role/components/roleForm.vue';
 import { useState } from '@/views/system/role/components/useState.ts';
 
 defineOptions({ name: 'SystemRole' });
 
-const { showForm, setState } = useState();
+const { setState } = useState();
 
 const { tableProps, params, resetParams, getTableData } = useTable({
   apiFunc: fetchRoleList,
   apiParams: {
-    name: '',
+    roleName: '',
     status: undefined,
   },
   isPagination: true,
   columns: () => [
     { type: 'index', fixed: 'left' },
-    { prop: 'name', label: '角色名称', minWidth: 120 },
+    { prop: 'roleName', label: '角色名称', minWidth: 120 },
     {
       prop: 'status',
       label: '状态',
@@ -37,7 +36,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       label: '操作',
       type: 'operation',
       fixed: 'right',
-      width: 190,
+      width: 120,
       align: 'center',
       buttons: [
         {
@@ -54,15 +53,15 @@ const { tableProps, params, resetParams, getTableData } = useTable({
             await getTableData();
           },
         },
-        {
-          label: '删除',
-          type: 'danger',
-          icon: 'Delete',
-          onClick: async ({ row }) => {
-            await useConfirm(deleteRole, row.id, '删除角色');
-            await getTableData();
-          },
-        },
+        // {
+        //   label: '删除',
+        //   type: 'danger',
+        //   icon: 'Delete',
+        //   onClick: async ({ row }) => {
+        //     await useConfirm(deleteRole, row.id, '删除角色');
+        //     await getTableData();
+        //   },
+        // },
       ],
     },
   ],
@@ -74,7 +73,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     <app-card>
       <app-form show-action inline :loading="tableProps.loading" @search="getTableData" @reset="resetParams">
         <app-form-item label="角色名称">
-          <el-input v-model="params.name" placeholder="请输入角色名称" clearable />
+          <el-input v-model="params.roleName" placeholder="请输入角色名称" clearable />
         </app-form-item>
         <app-form-item label="状态">
           <el-select v-model="params.status" placeholder="请选择状态" clearable>
@@ -84,13 +83,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
         </app-form-item>
       </app-form>
     </app-card>
-    <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="getTableData">
-      <template #button>
-        <el-button type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
-          新增
-        </el-button>
-      </template>
-    </app-table>
+    <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="getTableData" />
     <RoleForm @confirm="getTableData" />
   </div>
 </template>
