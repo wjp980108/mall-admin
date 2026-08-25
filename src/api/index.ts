@@ -66,11 +66,11 @@ export function uploadFile(params: FormData) {
 }
 
 // 上传图片
-export function uploadImage(params: FormData) {
+export function uploadImage(data: FormData) {
   return request({
-    url: '/api/upload/image',
+    url: '/api/file/upload',
     method: 'post',
-    data: params,
+    data,
     headers: {
       'Content-Type': 'multipart/form-data',
     },

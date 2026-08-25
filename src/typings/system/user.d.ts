@@ -1,4 +1,6 @@
 declare namespace User {
+  import type { Platform } from '../../constants/common.ts';
+
   interface Item {
     id: number;
     username: string;
@@ -6,6 +8,7 @@ declare namespace User {
     nickname: string;
     phone: string;
     avatar: string;
+    platform: Platform;
     email: string;
     gender: 0 | 1 | 2;
     roleIds: number[];

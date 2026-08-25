@@ -19,8 +19,6 @@ const { tableProps, params, resetParams, getTableData } = useTable({
   apiFunc: fetchUserList,
   apiParams: {
     username: '',
-    status: undefined,
-    gender: undefined,
   },
   isPagination: true,
   columns: () => [
@@ -70,7 +68,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
           type: 'warning',
           icon: ({ row }) => `healthicons:${row.status ? 'no' : 'yes'}-outline`,
           onClick: async ({ row }) => {
-            await updateUserStatus({ id: row.id, status: !row.status });
+            await updateUserStatus({ userId: row.id, status: !row.status });
             await getTableData();
           },
         },
@@ -95,17 +93,6 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       <app-form show-action inline :loading="tableProps.loading" @search="getTableData" @reset="resetParams">
         <app-form-item label="用户名">
           <el-input v-model="params.username" placeholder="请输入用户名" clearable />
-        </app-form-item>
-        <app-form-item label="状态">
-          <el-select v-model="params.status" placeholder="请选择状态" clearable>
-            <el-option label="启用" :value="true" />
-            <el-option label="禁用" :value="false" />
-          </el-select>
-        </app-form-item>
-        <app-form-item label="性别">
-          <el-select v-model="params.gender" placeholder="请选择状态" clearable>
-            <el-option v-for="(value, key) in GENDER_MAP" :key="key" :label="value.label" :value="key" />
-          </el-select>
         </app-form-item>
       </app-form>
     </app-card>

@@ -2,14 +2,12 @@ import request from '@/utils/axios';
 
 export interface UserListParams {
   username: string;
-  status?: boolean;
-  gender?: number;
 }
 
 export type UserCreateForm = Omit<User.Item, 'id'>;
 export type UserUpdateForm = User.Item;
 export interface UserUpdateStatus {
-  id: number;
+  userId: number;
   status: boolean;
 }
 
@@ -43,7 +41,7 @@ export function createUser(data: UserCreateForm) {
 // 编辑用户
 export function updateUser(data: UserUpdateForm) {
   return request({
-    url: `/api/users/${data.id}`,
+    url: '/api/users',
     method: 'put',
     data,
   }, {
@@ -55,8 +53,11 @@ export function updateUser(data: UserUpdateForm) {
 // 删除用户
 export function deleteUser(id: number) {
   return request({
-    url: `/api/users/${id}`,
+    url: '/api/users',
     method: 'delete',
+    data: {
+      userIds: [id],
+    },
   }, {
     loading: true,
   });
@@ -65,11 +66,9 @@ export function deleteUser(id: number) {
 // 更新用户状态
 export function updateUserStatus(data: UserUpdateStatus) {
   return request({
-    url: `/api/users/${data.id}/status`,
+    url: '/api/users/status',
     method: 'patch',
-    data: {
-      status: data.status,
-    },
+    data,
   }, {
     loading: true,
     successMessage: true,
