@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
  * @param dateTime 时间
  * @param format 格式化的格式
  */
-export function timeFormat(dateTime: dayjs.ConfigType, format: string = 'YYYY-MM-DD') {
+export function timeFormat(dateTime: dayjs.ConfigType = dayjs(), format: string = 'YYYY-MM-DD') {
   if (!dateTime)
     dateTime = dayjs();
   return dayjs(dateTime).format(format);
