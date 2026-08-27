@@ -24,20 +24,14 @@ watch(showForm, (value) => {
 const formRef = useTemplateRef<FormInstance>('formRef');
 const rules = computed<FormRules>(() => ({
   sessionName: { required: true, message: '请输入场次名称', trigger: 'blur' },
-  entryControlMinutes: { required: true, message: '请输入进场时间控制', trigger: 'change' },
-  startTime: { required: true, message: '请选择抢购开始时间', trigger: 'change' },
-  endTime: { required: true, message: '请选择抢购结束时间', trigger: 'change' },
-  maxPurchaseCount: { required: true, message: '请输入最多购买次数', trigger: 'change' },
-  beforeStartConsignmentMinutes: {
-    required: true,
-    message: '请输入开场前禁止委托时间',
-    trigger: 'change',
-  },
-  afterEndConsignmentMinutes: {
-    required: true,
-    message: '请输入结束后禁止委托时间',
-    trigger: 'change',
-  },
+  rushStartTime: { required: true, message: '请选择抢购开始时间', trigger: 'change' },
+  rushEndTime: { required: true, message: '请选择抢购结束时间', trigger: 'change' },
+  enterControlMinute: { required: true, message: '请输入进场时间控制', trigger: 'blur' },
+  maxBuyCount: { required: true, message: '请输入最多购买次数', trigger: 'blur' },
+  beforeForbidMinute: { required: true, message: '请输入开场前禁止委托时间', trigger: 'blur' },
+  afterForbidMinute: { required: true, message: '请输入结束后禁止委托时间', trigger: 'blur' },
+  bgImg: { required: true, message: '请上传场次背景图', trigger: 'change' },
+  sort: { required: true, message: '请输入显示顺序', trigger: 'blur' },
 }));
 
 // 存储平台
@@ -73,16 +67,20 @@ async function handleConfirm() {
       <app-form-item label="场次名称" prop="sessionName" :span="2">
         <el-input v-model="state.sessionName" placeholder="请输入场次名称" />
       </app-form-item>
-      <app-form-item label="抢购时间设置" :span="2">
+      <app-form-item label="抢购时间设置" :span="2" required>
         <app-flex class="w-full" vertical>
-          <el-time-select
-            v-model="state.rushStartTime" :max-time="state.rushEndTime"
-            placeholder="开始时间" start="08:30" step="00:15" end="18:30"
-          />
-          <el-time-select
-            v-model="state.rushEndTime" :min-time="state.rushStartTime"
-            placeholder="结束时间" start="08:30" step="00:15" end="18:30"
-          />
+          <app-form-item prop="rushStartTime">
+            <el-time-select
+              v-model="state.rushStartTime" :max-time="state.rushEndTime"
+              placeholder="开始时间" start="08:30" step="00:15" end="18:30"
+            />
+          </app-form-item>
+          <app-form-item prop="rushEndTime">
+            <el-time-select
+              v-model="state.rushEndTime" :min-time="state.rushStartTime"
+              placeholder="结束时间" start="08:30" step="00:15" end="18:30"
+            />
+          </app-form-item>
         </app-flex>
       </app-form-item>
       <app-form-item label="进场时间控制" prop="enterControlMinute" help-info="单位：分钟">
@@ -100,7 +98,7 @@ async function handleConfirm() {
       <app-form-item label="场次背景图" prop="bgImg">
         <app-upload v-model="state.bgImg" type="image" :api="uploadBgImg" />
       </app-form-item>
-      <app-form-item label="存储平台" prop="coverImgPlatform" help-info="场次背景图需要存储到那个平台下">
+      <app-form-item label="存储平台" prop="bgImgPlatform" help-info="场次背景图需要存储到那个平台下">
         <el-select
           v-model="state.bgImgPlatform" placeholder="请选择存储平台" :disabled="!!state.bgImg"
           :clearable="false"

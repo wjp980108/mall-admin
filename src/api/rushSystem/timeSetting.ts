@@ -29,7 +29,7 @@ export interface RushTimeSettingStatus {
 
 // 获取抢购时间设置列表
 export function fetchRushTimeSettingList(params: RushTimeSettingListParams) {
-  return request<AppAxios.PageData<RushTimeSettingItem>>({
+  return request<RushTimeSettingItem[]>({
     url: '/api/sessions',
     params,
   });
@@ -69,10 +69,10 @@ export function deleteRushTimeSetting(id: number) {
   });
 }
 
-// 更新菜单状态
+// 更新抢购时间设置状态
 export function updateRushTimeSettingStatus(data: RushTimeSettingStatus) {
   return request({
-    url: '/api/menus/status',
+    url: '/api/sessions/status',
     method: 'patch',
     data,
   }, {

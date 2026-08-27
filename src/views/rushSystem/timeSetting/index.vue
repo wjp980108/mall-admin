@@ -25,21 +25,32 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     { prop: 'sessionName', label: '场次名称', minWidth: 130, showOverflowTooltip: true, fixed: 'left' },
     {
       label: '抢购时间',
-      width: 100,
+      width: 130,
       align: 'center',
-      renderContent: ({ row }) => {
-        return (
-          <app-flex vertical>
-            <span>{row.rushStartTime}</span>
-            <span>{row.rushStartTime}</span>
-          </app-flex>
-        );
-      },
+      renderContent: ({ row }) => (<>{`${row.rushStartTime} 至 ${row.rushEndTime}`}</>),
     },
-    { prop: 'enterControlMinute', label: '进场时间控制', helpInfo: '单位：分钟', width: 130 },
+    {
+      prop: 'enterControlMinute',
+      label: '进场时间控制',
+      helpInfo: '单位：分钟',
+      width: 130,
+      align: 'center',
+    },
     { prop: 'maxBuyCount', label: '最多购买次数', width: 120 },
-    { prop: 'beforeForbidMinute', label: '开场前禁止委托时间', helpInfo: '单位：分钟', width: 170 },
-    { prop: 'afterForbidMinute', label: '结束后禁止委托时间', helpInfo: '单位：分钟', width: 170 },
+    {
+      prop: 'beforeForbidMinute',
+      label: '开场前禁止委托时间',
+      helpInfo: '单位：分钟',
+      width: 170,
+      align: 'center',
+    },
+    {
+      prop: 'afterForbidMinute',
+      label: '结束后禁止委托时间',
+      helpInfo: '单位：分钟',
+      width: 170,
+      align: 'center',
+    },
     { type: 'img', prop: 'bgImg', label: '场次背景图', width: 120 },
     {
       prop: 'status',
