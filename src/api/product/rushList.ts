@@ -89,7 +89,7 @@ export function deleteRushProduct(id: number) {
 // 更新抢购商品状态
 export function updateRushProductStatus(data: RushProductListStatus) {
   return request({
-    url: '/api/consign-goods/status',
+    url: '/api/consign-goods/online-status',
     method: 'patch',
     data,
   }, {

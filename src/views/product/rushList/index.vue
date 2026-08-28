@@ -25,9 +25,9 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     { prop: 'goodsName', label: '商品名称', width: 160, showOverflowTooltip: true },
     { type: 'money', prop: 'goodsPrice', label: '商品价格' },
     { type: 'img', prop: 'coverImg', label: '商品缩略图', width: 110 },
-    { prop: 'consignmentSaleCount', label: '委托售卖次数', width: 130 },
-    { prop: 'phone', label: '委托人手机号', width: 140 },
-    { prop: 'nickname', label: '委托人姓名', width: 120 },
+    { prop: 'saleTimes', label: '委托售卖次数', width: 130 },
+    { prop: 'consignor.phone', label: '委托人手机号', width: 140 },
+    { prop: 'consignor.nickname', label: '委托人姓名', width: 120 },
     { prop: 'currentStatus', label: '商品当前状态', width: 130, showOverflowTooltip: true },
     {
       prop: 'status',
