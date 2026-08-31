@@ -7,9 +7,18 @@ const RUSH_ORDER_API = '/api/rush-orders';
 
 export interface RushOrderItem {
   id: number;
-  orderNo: string;
+  productId?: number | string;
   productName: string;
+  sellerId?: number | string;
+  sellerReceiptPhone?: string;
+  sellerName?: string;
+  buyerId?: number | string;
+  buyerReceiptPhone?: string;
   buyerName: string;
+  rushPrice?: number;
+  listingFee?: number;
+  couponAmount?: number;
+  orderNo: string;
   productPrice: number;
   quantity: number;
   totalAmount: number;
