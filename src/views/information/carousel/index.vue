@@ -16,7 +16,7 @@ const { tableProps, getTableData } = useTable({
     { type: 'index', fixed: 'left' },
     { type: 'img', prop: 'imgUrl', label: '轮播图', width: 80 },
     { prop: 'position', label: '轮播图位置' },
-    { type: 'dateTime', prop: 'createdAt', label: '添加时间' },
+    { type: 'dateTime', prop: 'createdTime', label: '添加时间' },
     {
       label: '操作',
       type: 'operation',

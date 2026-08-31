@@ -6,11 +6,11 @@ export interface CarouselItem {
   position: '';
   sort: number;
   imgUrlPlatform: string;
-  createdAt: string;
+  createdTime: string;
 }
 
-export type CarouselCreateForm = Omit<CarouselItem, 'id' | 'createdAt'>;
-export type CarouselUpdateForm = Omit<CarouselItem, 'createdAt'>;
+export type CarouselCreateForm = Omit<CarouselItem, 'id' | 'createdTime'>;
+export type CarouselUpdateForm = Omit<CarouselItem, 'createdTime'>;
 
 // 获取轮播图列表
 export function fetchCarouselList(params: AnyObj) {

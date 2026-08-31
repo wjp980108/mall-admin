@@ -27,7 +27,7 @@ export interface RushOrderItem {
   receiverPhone: string;
   receiverAddress: string;
   remark: string;
-  createdAt?: string;
+  createdTime: string;
 }
 
 export interface RushOrderListParams {
@@ -37,8 +37,8 @@ export interface RushOrderListParams {
   status?: string;
 }
 
-export type RushOrderCreateForm = Omit<RushOrderItem, 'id' | 'createdAt'>;
-export type RushOrderUpdateForm = Omit<RushOrderItem, 'createdAt'>;
+export type RushOrderCreateForm = Omit<RushOrderItem, 'id' | 'createdTime'>;
+export type RushOrderUpdateForm = Omit<RushOrderItem, 'createdTime'>;
 
 // 获取所有抢购订单
 export function fetchRushOrderList(params: RushOrderListParams) {

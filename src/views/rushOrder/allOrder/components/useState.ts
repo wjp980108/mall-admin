@@ -16,6 +16,7 @@ export const useState = createSharedComposable(() => {
     receiverPhone: '',
     receiverAddress: '',
     remark: '',
+    createdTime: '',
   }));
 
   const showForm = ref(false);
