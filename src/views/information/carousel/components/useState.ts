@@ -8,7 +8,7 @@ export const useState = createSharedComposable(() => {
     imgUrl: '',
     position: '',
     sort: 0,
-    platform: 'local-1',
+    imgUrlPlatform: 'local-1',
   }));
 
   const showForm = ref(false);

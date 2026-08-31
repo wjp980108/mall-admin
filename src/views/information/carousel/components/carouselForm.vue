@@ -32,7 +32,7 @@ const uploadPlatformOptions = Object.entries(fileStoragePlatform);
 
 // 上传头像
 function uploadCarousel(data: FormData) {
-  data.append('platform', state.value.platform);
+  data.append('imgUrlPlatform', state.value.imgUrlPlatform);
   return uploadImage(data);
 }
 
@@ -64,7 +64,7 @@ async function handleConfirm() {
         <app-upload v-model="state.imgUrl" type="image" :api="uploadCarousel" />
       </app-form-item>
       <app-form-item label="存储平台" help-info="轮播图需要存储到那个平台下">
-        <el-select v-model="state.platform" placeholder="请选择存储平台" :disabled="!!state.imgUrl" :clearable="false">
+        <el-select v-model="state.imgUrlPlatform" placeholder="请选择存储平台" :disabled="!!state.imgUrl" :clearable="false">
           <el-option
             v-for="[value, label] in uploadPlatformOptions" :key="value" :label="label" :value="value"
           />

@@ -5,7 +5,7 @@ export interface CarouselItem {
   imgUrl: string;
   position: '';
   sort: number;
-  platform: string;
+  imgUrlPlatform: string;
   createdAt: string;
 }
 
