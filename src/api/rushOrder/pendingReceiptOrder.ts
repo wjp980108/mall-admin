@@ -9,9 +9,9 @@ export interface PendingReceiptOrderItem {
   sellerPhone: string;
   sellerName: string;
   buyerId: number;
-  buyerPhone: string;
   buyerName: string;
   rushPrice: number;
+  buyerPhone: string;
   receiveAddress: string;
   createTime: string;
 }
@@ -37,8 +37,8 @@ export function fetchPendingReceiptOrderList(params: PendingReceiptOrderListPara
 // 确认待确认收款订单
 export function confirmPendingReceiptOrder(id: number) {
   return request({
-    url: '/api/order/cancel',
-    method: 'delete',
+    url: '/api/order/confirmReceive',
+    method: 'post',
     data: { id },
   }, {
     loading: true,
@@ -49,7 +49,7 @@ export function confirmPendingReceiptOrder(id: number) {
 export function cancelPendingReceiptOrder(data: CancelPendingReceiptOrder) {
   return request({
     url: '/api/order/cancel',
-    method: 'delete',
+    method: 'post',
     data,
   }, {
     loading: true,
