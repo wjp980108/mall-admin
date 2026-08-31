@@ -10,14 +10,14 @@ export interface PendingPaymentOrderItem {
   orderNo: string;
   goodsId: number;
   goodsName: string;
-  sellerId: number;
-  sellerPhone: string;
-  sellerName: string;
   buyerId: number;
   buyerPhone: string;
   buyerName: string;
   rushPrice: number;
   receiveAddress: string;
+  sellerId: number;
+  sellerPhone: string;
+  sellerName: string;
   createTime: string;
 }
 
@@ -45,7 +45,7 @@ export function fetchPendingPaymentOrderList(params: PendingPaymentOrderListPara
 export function cancelPendingReceiptOrder(data: PendingPaymentOrderStatus) {
   return request({
     url: '/api/order/cancel',
-    method: 'delete',
+    method: 'post',
     data,
   }, {
     loading: true,

@@ -4,18 +4,19 @@ import { useReset } from '@/hooks/useReset';
 
 export const useState = createSharedComposable(() => {
   const [state, reset] = useReset<PendingPaymentOrderItem>(() => ({
-    orderId: '',
-    productName: '',
-    price: 0,
-    bidAt: '',
-    remainingPaymentTime: '',
-    buyerId: '',
+    id: 0,
+    orderNo: '',
+    goodsId: 0,
+    goodsName: '',
+    buyerId: 0,
     buyerPhone: '',
     buyerName: '',
-    buyerParentNickname: '',
-    buyerTopNickname: '',
+    rushPrice: 0,
+    receiveAddress: '',
+    sellerId: 0,
     sellerPhone: '',
     sellerName: '',
+    createTime: '',
   }));
 
   const showForm = ref(false);

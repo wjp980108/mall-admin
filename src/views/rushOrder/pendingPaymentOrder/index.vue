@@ -21,7 +21,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
   isPagination: true,
   columns: () => [
     { prop: 'orderNo', label: '订单号', width: 170, fixed: 'left' },
-    { prop: 'productName', label: '商品名称', width: 160, showOverflowTooltip: true },
+    { prop: 'goodsName', label: '商品名称', width: 160, showOverflowTooltip: true },
     { type: 'money', prop: 'price', label: '价格' },
     { type: 'dateTime', prop: 'bidAt', label: '拍下时间' },
     { prop: 'remainingPaymentTime', label: '当前剩余付款时间', width: 160 },
@@ -37,16 +37,17 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       label: '操作',
       type: 'operation',
       fixed: 'right',
-      width: 190,
+      width: 220,
       align: 'center',
       buttons: [
         {
           label: '取消订单',
           type: 'danger',
-          icon: 'CircleCancel',
+          icon: 'CircleClose',
           onClick: async ({ row }) => {
             const res = await ElMessageBox.prompt('温馨提示', '是否取消该订单', {
               inputErrorMessage: '请输入取消订单备注',
+              inputPlaceholder: '请输入备注',
               type: 'warning',
             });
             await cancelPendingReceiptOrder({
@@ -66,8 +67,9 @@ const { tableProps, params, resetParams, getTableData } = useTable({
           type: 'danger',
           icon: 'Delete',
           onClick: async ({ row }) => {
-            const res = await ElMessageBox.prompt('温馨提示', '是否取消该订单', {
-              inputErrorMessage: '请输入取消订单备注',
+            const res = await ElMessageBox.prompt('温馨提示', '是否删除该订单', {
+              inputErrorMessage: '请输入删除订单备注',
+              inputPlaceholder: '请输入备注',
               type: 'warning',
             });
             await deletePendingPaymentOrder({
