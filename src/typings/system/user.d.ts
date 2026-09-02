@@ -17,11 +17,14 @@ declare namespace User {
   }
 
   interface CurrentUser {
-    userId: number;
+    id: number;
+    username: string;
     nickname: string;
     phone: string;
     email: string | null;
+    gender: 0 | 1 | 2;
     avatar: string;
+    avatarPlatform: Platform | null;
     permissions: string[];
   }
 }

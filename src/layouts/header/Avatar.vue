@@ -10,6 +10,11 @@ const { t } = useI18n();
 const userStore = useUserStore();
 
 function handleSelect(val: string) {
+  if (val === 'userCenter') {
+    router.push('/profile');
+    return;
+  }
+
   if (val === 'loginOut') {
     ElMessageBox.confirm(t('confirm.content'), t('confirm.title'), {
       confirmButtonText: t('confirm.confirm'),
