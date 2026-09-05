@@ -67,7 +67,7 @@ Setup-store style (`defineStore('...', () => { ... })`), persisted via `pinia-pl
 Each third-party lib has an init/config module (`elementPlus.ts`, `i18n.ts`, `dayjs.ts`, `echarts.ts`, `wangEditor.ts`, `versionRocket.ts`, `weiXin.ts` for WeCom login, `nprogress.ts`, `settings.ts`). App bootstrap wiring is in `src/main.ts` (`installPinia` → `installRouter` → `setupGlobalDirectives` → `installI18n`).
 
 ### i18n
-Locales are precompiled YAML under `src/locales/` (via `@intlify/unplugin-vue-i18n`). Use the auto-imported `$t()` in TS/utils and `$t`/`t` in templates. New user-facing strings should be added to the locale files, not hardcoded — see how `src/utils/axios.ts` keys error messages (`axios.errorStatus.*`).
+This project does not require internationalization (i18n). Use Chinese text directly when adding or modifying business pages; do not add translation keys or maintain multilingual copy. This project convention takes precedence over generic skill guidance requiring localized strings. Keep the existing framework i18n infrastructure unless its removal is explicitly requested.
 
 ## Conventions
 - Vue SFCs use `<script setup lang="ts">`.
