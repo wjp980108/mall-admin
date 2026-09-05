@@ -1,6 +1,7 @@
 <script setup lang="tsx">
 import { deleteAnnouncement, fetchAnnouncementList } from '@/api/information/announcement';
 import { renderIcon, useTable } from '@/components';
+import { informationPosition } from '@/constants/information';
 import { useConfirm } from '@/hooks/useConfirm';
 import AnnouncementForm from './components/announcementForm.vue';
 import { useState } from './components/useState.ts';
@@ -23,6 +24,11 @@ const { tableProps, getTableData } = useTable({
       renderContent: ({ row }) => {
         return <dev vHtml={row.content} />;
       },
+    },
+    {
+      prop: 'position',
+      label: '位置',
+      renderContent: ({ row }) => informationPosition[row.position] || row.position || '-',
     },
     { type: 'dateTime', prop: 'createTime', label: '添加时间' },
     {

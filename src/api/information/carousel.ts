@@ -1,9 +1,10 @@
+import type { InformationPosition } from '@/constants/information';
 import request from '@/utils/axios';
 
 export interface CarouselItem {
   id: number;
   imgUrl: string;
-  position: '';
+  position: InformationPosition;
   sort: number;
   imgUrlPlatform: string;
   createdTime: string;

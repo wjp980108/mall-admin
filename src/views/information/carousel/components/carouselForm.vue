@@ -3,6 +3,7 @@ import type { FormInstance, FormRules } from 'element-plus';
 import { uploadImage } from '@/api';
 import { createCarousel, updateCarousel } from '@/api/information/carousel';
 import { fileStoragePlatform } from '@/constants/common.ts';
+import { informationPosition } from '@/constants/information';
 import { useState } from './useState.ts';
 
 defineOptions({ name: 'CarouselForm' });
@@ -17,7 +18,7 @@ const title = computed(() => {
 
 const rules = computed<FormRules>(() => ({
   imgUrl: { required: true, message: '请上传轮播图', trigger: 'change' },
-  position: { required: true, message: '请输入轮播图位置', trigger: 'change' },
+  position: { required: true, message: '请选择位置', trigger: 'change' },
 }));
 
 const formRef = useTemplateRef<FormInstance>('formRef');
@@ -70,8 +71,10 @@ async function handleConfirm() {
           />
         </el-select>
       </app-form-item>
-      <app-form-item label="轮播图位置" prop="position">
-        <el-input v-model="state.position" placeholder="请输入轮播图位置" />
+      <app-form-item label="位置" prop="position">
+        <el-select v-model="state.position" placeholder="请选择位置">
+          <el-option v-for="(label, value) in informationPosition" :key="value" :value="value" :label="label" />
+        </el-select>
       </app-form-item>
       <app-form-item label="权重" prop="sort" help-info="越大越考前">
         <el-input-number v-model="state.sort" />

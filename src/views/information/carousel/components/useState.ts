@@ -6,7 +6,7 @@ export const useState = createSharedComposable(() => {
   const [state, reset] = useReset<CarouselUpdateForm>(() => ({
     id: 0,
     imgUrl: '',
-    position: '',
+    position: 'home',
     sort: 0,
     imgUrlPlatform: 'local-1',
   }));

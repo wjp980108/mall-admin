@@ -7,6 +7,7 @@ export const useState = createSharedComposable(() => {
     id: 0,
     title: '',
     content: '',
+    position: 'home',
   }));
 
   const showForm = ref(false);

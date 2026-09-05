@@ -1,6 +1,7 @@
 <script setup lang="tsx">
 import { deleteCarousel, fetchCarouselList } from '@/api/information/carousel';
 import { renderIcon, useTable } from '@/components';
+import { informationPosition } from '@/constants/information';
 import { useConfirm } from '@/hooks/useConfirm';
 import CarouselForm from './components/carouselForm.vue';
 import { useState } from './components/useState.ts';
@@ -15,7 +16,11 @@ const { tableProps, getTableData } = useTable({
   columns: () => [
     { type: 'index', fixed: 'left' },
     { type: 'img', prop: 'imgUrl', label: '轮播图', width: 80 },
-    { prop: 'position', label: '轮播图位置' },
+    {
+      prop: 'position',
+      label: '位置',
+      renderContent: ({ row }) => informationPosition[row.position] || row.position || '-',
+    },
     { type: 'dateTime', prop: 'createdTime', label: '添加时间' },
     {
       label: '操作',

@@ -1,9 +1,11 @@
+import type { InformationPosition } from '@/constants/information';
 import request from '@/utils/axios';
 
 export interface AnnouncementItem {
   id: number;
   title: string;
   content: string;
+  position: InformationPosition;
   createTime: string;
 }
 
