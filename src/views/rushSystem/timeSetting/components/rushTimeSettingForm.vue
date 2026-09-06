@@ -72,20 +72,20 @@ async function handleConfirm() {
           <app-form-item prop="rushStartTime">
             <el-time-select
               v-model="state.rushStartTime" :max-time="state.rushEndTime"
-              placeholder="开始时间" start="08:30" step="00:15" end="18:30"
+              placeholder="开始时间" start="07:00" step="00:30" end="23:59"
             />
           </app-form-item>
           <app-form-item prop="rushEndTime">
             <el-time-select
               v-model="state.rushEndTime" :min-time="state.rushStartTime"
-              placeholder="结束时间" start="08:30" step="00:15" end="18:30"
+              placeholder="结束时间" start="07:00" step="00:30" end="23:59"
             />
           </app-form-item>
         </app-flex>
       </app-form-item>
-      <app-form-item label="进场时间控制" prop="enterControlMinute" help-info="单位：分钟">
-        <el-input-number v-model="state.enterControlMinute" :min="0" :precision="0" />
-      </app-form-item>
+      <!--      <app-form-item label="进场时间控制" prop="enterControlMinute" help-info="单位：分钟"> -->
+      <!--        <el-input-number v-model="state.enterControlMinute" :min="0" :precision="0" /> -->
+      <!--      </app-form-item> -->
       <app-form-item label="最多购买次数" prop="maxBuyCount">
         <el-input-number v-model="state.maxBuyCount" :min="1" :precision="0" />
       </app-form-item>
@@ -104,7 +104,8 @@ async function handleConfirm() {
           :clearable="false"
         >
           <el-option
-            v-for="[value, label] in uploadPlatformOptions" :key="value" :label="label" :value="value"
+            v-for="[value, label] in uploadPlatformOptions" :key="value" :label="label"
+            :value="value"
           />
         </el-select>
       </app-form-item>

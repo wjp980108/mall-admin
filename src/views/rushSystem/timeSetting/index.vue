@@ -29,13 +29,13 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       align: 'center',
       renderContent: ({ row }) => (<>{`${row.rushStartTime} 至 ${row.rushEndTime}`}</>),
     },
-    {
-      prop: 'enterControlMinute',
-      label: '进场时间控制',
-      helpInfo: '单位：分钟',
-      width: 130,
-      align: 'center',
-    },
+    // {
+    //   prop: 'enterControlMinute',
+    //   label: '进场时间控制',
+    //   helpInfo: '单位：分钟',
+    //   width: 130,
+    //   align: 'center',
+    // },
     { prop: 'maxBuyCount', label: '最多购买次数', width: 120 },
     {
       prop: 'beforeForbidMinute',
