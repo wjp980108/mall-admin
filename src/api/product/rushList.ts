@@ -1,12 +1,9 @@
-import type { RushTimeSettingItem } from '@/api/rushSystem/timeSetting.ts';
 import request from '@/utils/axios';
 
 export interface RushProductItem {
   id: number;
   goodsName: string;
   goodsPrice: number;
-  memberId: string;
-  sessionId: string;
   coverImg: string;
   coverImgPlatform: string;
   detailImg: string;
@@ -18,7 +15,6 @@ export interface RushProductItem {
 
 export interface RushProductListParams {
   goodsName: string;
-  consignorPhone: string;
   onlineStatus?: boolean;
 }
 
@@ -35,20 +31,6 @@ export function fetchRushProductList(params: RushProductListParams) {
   return request<RushProductItem[]>({
     url: '/api/consign-goods',
     params,
-  });
-}
-
-// 获取委托人列表
-export function fetchUserList() {
-  return request<User.Item[]>({
-    url: '/api/users/options',
-  });
-}
-
-// 获取所属场次列表
-export function fetchSessionList() {
-  return request<RushTimeSettingItem[]>({
-    url: '/api/sessions/options',
   });
 }
 

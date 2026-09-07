@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus';
-import type { RushTimeSettingItem } from '@/api/rushSystem/timeSetting.ts';
 import { uploadImage } from '@/api/index.ts';
 import {
   createRushProduct,
-  fetchSessionList,
-  fetchUserList,
   updateRushProduct,
 } from '@/api/product/rushList.ts';
 import { fileStoragePlatform } from '@/constants/common.ts';
@@ -21,32 +18,8 @@ const title = computed(() => {
   return state.value.id ? '编辑抢购商品' : '新增抢购商品';
 });
 
-// 获取委托人列表 --- start
-const userList = ref<User.Item[]>([]);
-
-async function getUserList() {
-  const res = await fetchUserList();
-  userList.value = res.data;
-}
-
-// 获取委托人列表 --- end
-
-// 获取所属场次列表 --- start
-const sessionList = ref<RushTimeSettingItem[]>([]);
-
-async function getSessionList() {
-  const res = await fetchSessionList();
-  sessionList.value = res.data;
-}
-
-// 获取所属场次列表 --- end
-
 watch(showForm, (value) => {
-  if (value) {
-    getUserList();
-    getSessionList();
-  }
-  else {
+  if (!value) {
     reset();
   }
 });
@@ -64,8 +37,6 @@ const formRef = useTemplateRef<FormInstance>('formRef');
 const rules = computed<FormRules>(() => ({
   goodsName: { required: true, message: '请输入商品名称', trigger: 'blur' },
   goodsPrice: { required: true, message: '请输入商品价格', trigger: 'blur' },
-  memberId: { required: true, message: '请选择委托人', trigger: 'change' },
-  sessionId: { required: true, message: '请选择所属场次', trigger: 'change' },
   coverImg: { required: true, message: '请上传商品缩略图', trigger: 'change' },
   detailImg: { required: true, message: '请上传商品详情图', trigger: 'change' },
   currentStatus: { required: true, message: '请输入商品当前状态', trigger: 'blur' },
@@ -100,18 +71,6 @@ async function handleConfirm() {
       </app-form-item>
       <app-form-item label="商品价格" prop="goodsPrice">
         <el-input-number v-model="state.goodsPrice" :min="0" :precision="2" />
-      </app-form-item>
-      <app-form-item label="委托人" prop="memberId">
-        <el-select
-          v-model="state.memberId" :options="userList" placeholder="请选择委托人"
-          filterable
-        />
-      </app-form-item>
-      <app-form-item label="所属场次" prop="sessionId">
-        <el-select
-          v-model="state.sessionId" :options="sessionList" placeholder="请选择所属场次"
-          filterable
-        />
       </app-form-item>
       <app-form-item label="商品缩略图" prop="coverImg">
         <app-upload v-model="state.coverImg" type="image" :api="uploadCarousel" />

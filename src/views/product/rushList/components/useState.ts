@@ -7,8 +7,6 @@ export const useState = createSharedComposable(() => {
     id: 0,
     goodsName: '',
     goodsPrice: 0,
-    memberId: '',
-    sessionId: '',
     coverImg: '',
     coverImgPlatform: 'local-1',
     detailImg: '',
