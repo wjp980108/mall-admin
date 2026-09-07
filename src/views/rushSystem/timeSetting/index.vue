@@ -7,11 +7,13 @@ import {
 import { renderIcon, useTable } from '@/components';
 import { useConfirm } from '@/hooks/useConfirm';
 import RushTimeSettingForm from './components/rushTimeSettingForm.vue';
+import SessionProductDrawer from './components/sessionProductDrawer.vue';
 import { useState } from './components/useState.ts';
 
 defineOptions({ name: 'RushTimeSetting' });
 
 const { showForm, setState } = useState();
+const sessionProductDrawerRef = useTemplateRef<InstanceType<typeof SessionProductDrawer>>('sessionProductDrawerRef');
 
 const { tableProps, params, resetParams, getTableData } = useTable({
   apiFunc: fetchRushTimeSettingList,
@@ -29,14 +31,6 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       align: 'center',
       renderContent: ({ row }) => (<>{`${row.rushStartTime} 至 ${row.rushEndTime}`}</>),
     },
-    // {
-    //   prop: 'enterControlMinute',
-    //   label: '进场时间控制',
-    //   helpInfo: '单位：分钟',
-    //   width: 130,
-    //   align: 'center',
-    // },
-    { prop: 'maxBuyCount', label: '最多购买次数', width: 120 },
     {
       prop: 'beforeForbidMinute',
       label: '开场前禁止委托时间',
@@ -67,9 +61,14 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       label: '操作',
       type: 'operation',
       fixed: 'right',
-      width: 190,
+      width: 250,
       align: 'center',
       buttons: [
+        {
+          label: '关联商品',
+          icon: 'Connection',
+          onClick: ({ row }) => sessionProductDrawerRef.value?.open(row),
+        },
         {
           label: '编辑',
           icon: 'EditPen',
@@ -117,10 +116,11 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="getTableData">
       <template #button>
         <el-button type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
-          新增抢购时间
+          新增抢购场次
         </el-button>
       </template>
     </app-table>
     <RushTimeSettingForm @confirm="getTableData" />
+    <SessionProductDrawer ref="sessionProductDrawerRef" />
   </div>
 </template>

@@ -26,8 +26,6 @@ const rules = computed<FormRules>(() => ({
   sessionName: { required: true, message: '请输入场次名称', trigger: 'blur' },
   rushStartTime: { required: true, message: '请选择抢购开始时间', trigger: 'change' },
   rushEndTime: { required: true, message: '请选择抢购结束时间', trigger: 'change' },
-  enterControlMinute: { required: true, message: '请输入进场时间控制', trigger: 'blur' },
-  maxBuyCount: { required: true, message: '请输入最多购买次数', trigger: 'blur' },
   beforeForbidMinute: { required: true, message: '请输入开场前禁止委托时间', trigger: 'blur' },
   afterForbidMinute: { required: true, message: '请输入结束后禁止委托时间', trigger: 'blur' },
   bgImg: { required: true, message: '请上传场次背景图', trigger: 'change' },
@@ -83,15 +81,6 @@ async function handleConfirm() {
           </app-form-item>
         </app-flex>
       </app-form-item>
-      <!--      <app-form-item label="进场时间控制" prop="enterControlMinute" help-info="单位：分钟"> -->
-      <!--        <el-input-number v-model="state.enterControlMinute" :min="0" :precision="0" /> -->
-      <!--      </app-form-item> -->
-      <app-form-item label="最多购买次数" prop="maxBuyCount">
-        <el-input-number v-model="state.maxBuyCount" :min="1" :precision="0" />
-      </app-form-item>
-      <app-form-item label="显示顺序" prop="sort">
-        <el-input-number v-model="state.sort" :min="1" placeholder="请输入显示顺序" />
-      </app-form-item>
       <app-form-item label="开场前禁止委托时间" prop="beforeForbidMinute" help-info="单位：分钟">
         <el-input-number v-model="state.beforeForbidMinute" :min="0" :precision="0" />
       </app-form-item>
@@ -111,6 +100,9 @@ async function handleConfirm() {
             :value="value"
           />
         </el-select>
+      </app-form-item>
+      <app-form-item label="显示顺序" prop="sort">
+        <el-input-number v-model="state.sort" :min="1" placeholder="请输入显示顺序" />
       </app-form-item>
       <app-form-item label="场次状态" prop="sessionStatus">
         <el-radio-group v-model="state.sessionStatus">

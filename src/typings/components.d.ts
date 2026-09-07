@@ -12,6 +12,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppBaseTable: typeof import('@/components/index')['AppBaseTable']
     AppCard: typeof import('@/components/index')['AppCard']
     AppDrawer: typeof import('@/components/index')['AppDrawer']
     AppEditor: typeof import('@/components/index')['AppEditor']
@@ -102,6 +103,7 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const AppBaseTable: typeof import('@/components/index')['AppBaseTable']
   const AppCard: typeof import('@/components/index')['AppCard']
   const AppDrawer: typeof import('@/components/index')['AppDrawer']
   const AppEditor: typeof import('@/components/index')['AppEditor']

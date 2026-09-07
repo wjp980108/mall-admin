@@ -5,8 +5,6 @@ export interface RushTimeSettingItem {
   sessionName: string;
   rushStartTime: string;
   rushEndTime: string;
-  enterControlMinute: number;
-  maxBuyCount: number;
   beforeForbidMinute: number;
   afterForbidMinute: number;
   bgImg: string;
