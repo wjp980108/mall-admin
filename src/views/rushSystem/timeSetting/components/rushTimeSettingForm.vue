@@ -89,6 +89,9 @@ async function handleConfirm() {
       <app-form-item label="最多购买次数" prop="maxBuyCount">
         <el-input-number v-model="state.maxBuyCount" :min="1" :precision="0" />
       </app-form-item>
+      <app-form-item label="显示顺序" prop="sort">
+        <el-input-number v-model="state.sort" :min="1" placeholder="请输入显示顺序" />
+      </app-form-item>
       <app-form-item label="开场前禁止委托时间" prop="beforeForbidMinute" help-info="单位：分钟">
         <el-input-number v-model="state.beforeForbidMinute" :min="0" :precision="0" />
       </app-form-item>
@@ -108,9 +111,6 @@ async function handleConfirm() {
             :value="value"
           />
         </el-select>
-      </app-form-item>
-      <app-form-item label="显示顺序" prop="sort">
-        <el-input-number v-model="state.sort" :min="1" placeholder="请输入显示顺序" />
       </app-form-item>
       <app-form-item label="场次状态" prop="sessionStatus">
         <el-radio-group v-model="state.sessionStatus">
