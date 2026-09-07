@@ -1,25 +1,25 @@
 import request from '@/utils/axios';
 
-export interface UserAgreement {
+export interface PrivacyAgreement {
   title: string;
   content: string;
 }
 
-// 获取用户协议
-export function fetchUserAgreement() {
-  return request<UserAgreement>({
+// 获取隐私协议
+export function fetchPrivacyAgreement() {
+  return request<PrivacyAgreement>({
     url: '/api/agreement',
-    params: { type: 1 },
+    params: { type: 2 },
   });
 }
 
-// 保存用户协议
-export function updateUserAgreement(data: UserAgreement) {
+// 保存隐私协议
+export function updatePrivacyAgreement(data: PrivacyAgreement) {
   return request({
     url: '/api/agreement',
     method: 'put',
     data: {
-      type: 1,
+      type: 2,
       ...data,
     },
   }, {
