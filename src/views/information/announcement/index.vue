@@ -41,12 +41,14 @@ const { tableProps, getTableData } = useTable({
         {
           label: '编辑',
           icon: 'EditPen',
+          auth: 'system:announcement:edit',
           onClick: ({ row }) => setState(row),
         },
         {
           label: '删除',
           type: 'danger',
           icon: 'Delete',
+          auth: 'system:announcement:remove',
           onClick: async ({ row }) => {
             await useConfirm(deleteAnnouncement, row.id, '删除该公告');
             await getTableData();
@@ -62,7 +64,7 @@ const { tableProps, getTableData } = useTable({
   <div class="main-container">
     <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="getTableData">
       <template #button>
-        <el-button type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
+        <el-button v-auth="'system:announcement:add'" type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
           新增公告
         </el-button>
       </template>

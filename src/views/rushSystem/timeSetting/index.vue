@@ -67,17 +67,20 @@ const { tableProps, params, resetParams, getTableData } = useTable({
         {
           label: '关联商品',
           icon: 'Connection',
+          auth: 'system:timeSetting:relatedProducts',
           onClick: ({ row }) => sessionProductDrawerRef.value?.open(row),
         },
         {
           label: '编辑',
           icon: 'EditPen',
+          auth: 'system:timeSetting:edit',
           onClick: ({ row }) => setState(row),
         },
         {
           label: ({ row }) => (row.sessionStatus ? '禁用' : '启用'),
           type: 'warning',
           icon: ({ row }) => `healthicons:${row.sessionStatus ? 'no' : 'yes'}-outline`,
+          auth: 'system:timeSetting:status',
           onClick: async ({ row }) => {
             await updateRushTimeSettingStatus({ id: row.id, status: !row.sessionStatus });
             await getTableData();
@@ -87,6 +90,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
           label: '删除',
           type: 'danger',
           icon: 'Delete',
+          auth: 'system:timeSetting:remove',
           onClick: async ({ row }) => {
             await useConfirm(deleteRushTimeSetting, row.id, '删除该抢购时间设置');
             await getTableData();
@@ -115,7 +119,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     </app-card>
     <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="getTableData">
       <template #button>
-        <el-button type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
+        <el-button v-auth="'system:timeSetting:add'" type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
           新增抢购场次
         </el-button>
       </template>

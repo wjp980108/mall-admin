@@ -132,6 +132,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
           label: '转移订单',
           icon: 'Switch',
           show: ({ row }) => row.orderStatus === 1,
+          auth: 'system:allOrder:shift',
           onClick: ({ row }) => openTransfer(row),
         },
         {
@@ -139,6 +140,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
           type: 'danger',
           icon: 'CircleClose',
           show: ({ row }) => row.orderStatus === 1,
+          auth: 'system:allOrder:cancel',
           onClick: async ({ row }) => {
             await useConfirm(cancelRobOrder, row.id, '取消该订单');
             await getTableData();

@@ -49,12 +49,14 @@ const { tableProps, params, resetParams, getTableData } = useTable({
         {
           label: '编辑',
           icon: 'EditPen',
+          auth: 'system:product:edit',
           onClick: ({ row }) => setState(row),
         },
         {
           label: ({ row }) => (row.status ? '下架' : '上架'),
           type: 'warning',
           icon: ({ row }) => `healthicons:${row.status ? 'no' : 'yes'}-outline`,
+          auth: 'system:product:status',
           onClick: async ({ row }) => {
             await updateProductStatus({ id: row.id, status: !row.status });
             await getTableData();
@@ -64,6 +66,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
           label: '删除',
           type: 'danger',
           icon: 'Delete',
+          auth: 'system:product:remove',
           onClick: async ({ row }) => {
             await useConfirm(deleteProduct, row.id, '删除该商品');
             await getTableData();
@@ -95,7 +98,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     </app-card>
     <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="getTableData">
       <template #button>
-        <el-button type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
+        <el-button v-auth="'system:product:add'" type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
           新增商品
         </el-button>
       </template>

@@ -67,11 +67,13 @@ const { tableProps, params, resetParams, getTableData } = useTable({
         {
           label: '编辑',
           icon: 'EditPen',
+          auth: 'system:menu:edit',
           onClick: ({ row }) => setState(row),
         },
         {
           label: ({ row }) => (row.status ? '禁用' : '启用'),
           type: 'warning',
+          auth: 'system:menu:status',
           icon: ({ row }) => `healthicons:${row.status ? 'no' : 'yes'}-outline`,
           onClick: async ({ row }) => {
             await updateMenuStatus({ id: row.id, status: !row.status });
@@ -82,6 +84,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
           label: '删除',
           type: 'danger',
           icon: 'Delete',
+          auth: 'system:menu:remove',
           onClick: async ({ row }) => {
             await useConfirm(deleteMenu, row.id, '删除菜单');
             await getTableData();

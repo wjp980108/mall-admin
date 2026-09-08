@@ -133,7 +133,7 @@ onMounted(getSettings);
         </app-card>
       </app-flex>
 
-      <div class="sticky bottom-0 z-10 flex justify-center py-12">
+      <div v-auth="'system:settings:save'" class="sticky bottom-0 z-10 flex justify-center py-12">
         <el-button type="primary" :loading="saving" @click="handleSave">
           保存系统设置
         </el-button>

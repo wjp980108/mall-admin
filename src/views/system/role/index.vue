@@ -42,12 +42,14 @@ const { tableProps, params, resetParams, getTableData } = useTable({
         {
           label: '编辑',
           icon: 'EditPen',
+          auth: 'system:role:edit',
           onClick: ({ row }) => setState(row),
         },
         {
           label: ({ row }) => (row.status ? '禁用' : '启用'),
           type: 'warning',
           icon: ({ row }) => `healthicons:${row.status ? 'no' : 'yes'}-outline`,
+          auth: 'system:role:status',
           onClick: async ({ row }) => {
             await updateRoleStatus({ id: row.id, status: !row.status });
             await getTableData();

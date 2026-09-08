@@ -32,12 +32,14 @@ const { tableProps, getTableData } = useTable({
         {
           label: '编辑',
           icon: 'EditPen',
+          auth: 'system:carousel:edit',
           onClick: ({ row }) => setState(row),
         },
         {
           label: '删除',
           type: 'danger',
           icon: 'Delete',
+          auth: 'system:carousel:remove',
           onClick: async ({ row }) => {
             await useConfirm(deleteCarousel, row.id, '删除该轮播图');
             await getTableData();
@@ -53,7 +55,7 @@ const { tableProps, getTableData } = useTable({
   <div class="main-container">
     <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="getTableData">
       <template #button>
-        <el-button type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
+        <el-button v-auth="'system:carousel:add'" type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
           新增轮播图
         </el-button>
       </template>

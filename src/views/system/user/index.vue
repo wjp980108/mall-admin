@@ -61,12 +61,14 @@ const { tableProps, params, resetParams, getTableData } = useTable({
         {
           label: '编辑',
           icon: 'EditPen',
+          auth: 'system:user:edit',
           onClick: ({ row }) => setState(row),
         },
         {
           label: ({ row }) => (row.status ? '禁用' : '启用'),
           type: 'warning',
           icon: ({ row }) => `healthicons:${row.status ? 'no' : 'yes'}-outline`,
+          auth: 'system:user:status',
           onClick: async ({ row }) => {
             await updateUserStatus({ userId: row.id, status: !row.status });
             await getTableData();
@@ -76,6 +78,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
           label: '删除',
           type: 'danger',
           icon: 'Delete',
+          auth: 'system:user:remove',
           onClick: async ({ row }) => {
             await useConfirm(deleteUser, row.id, '删除用户');
             await getTableData();
@@ -98,7 +101,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     </app-card>
     <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="getTableData">
       <template #button>
-        <el-button type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
+        <el-button v-auth="'system:user:add'" type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
           新增
         </el-button>
       </template>
