@@ -1,69 +1,73 @@
 import request from '@/utils/axios';
 
-/**
- * 抢购商品订单接口占位：后端接口和字段确认后统一替换。
- */
-const RUSH_ORDER_API = '/api/rush-orders';
+const ROB_ORDER_API = '/api/robOrders';
 
-export interface RushOrderItem {
+export interface RobOrderItem {
   id: number;
-  productId?: number | string;
-  productName: string;
-  sellerId?: number | string;
-  sellerReceiptPhone?: string;
-  sellerName?: string;
-  buyerId?: number | string;
-  buyerReceiptPhone?: string;
-  buyerName: string;
-  rushPrice?: number;
-  listingFee?: number;
-  couponAmount?: number;
   orderNo: string;
-  productPrice: number;
+  sessionProductId: number;
+  sessionId: number;
+  sessionName: string;
+  rushStartTime: string;
+  rushEndTime: string;
+  goodsId: number;
+  goodsName: string;
+  goodsSn: string;
+  goodsThumb: string;
+  unitPrice: number;
   quantity: number;
   totalAmount: number;
-  status: string;
-  receiverName: string;
-  receiverPhone: string;
-  receiverAddress: string;
-  remark: string;
-  createdTime: string;
-}
-
-export interface RushOrderListParams {
-  orderNo: string;
-  productName: string;
+  profitAmount: number;
+  recommendAmount: number;
+  selfBuyAmount: number;
+  selfBuyBonusAmount: number;
+  selfBuyCouponAmount: number;
+  buyerId: number;
   buyerName: string;
-  status?: string;
+  buyerPhone: string;
+  buyerAvatar: string;
+  inviterId: number | null;
+  inviterName: string | null;
+  orderStatus: 1 | 2;
+  orderStatusName: string;
+  createTime: string;
 }
 
-export type RushOrderCreateForm = Omit<RushOrderItem, 'id' | 'createdTime'>;
-export type RushOrderUpdateForm = Omit<RushOrderItem, 'createdTime'>;
+export interface RobOrderListParams {
+  timeRange: [string, string];
+  keyword: string;
+  orderStatus?: 1 | 2;
+}
 
-// 获取所有抢购订单
-export function fetchRushOrderList(params: RushOrderListParams) {
-  return request<AppAxios.PageData<RushOrderItem>>({
-    url: RUSH_ORDER_API,
+export interface RobOrderTransferForm {
+  orderId: number;
+  newBuyerId: number;
+}
+
+export interface UserOption {
+  label: string;
+  value: number;
+}
+
+// 获取抢购订单分页列表
+export function fetchRobOrderList(params: RobOrderListParams) {
+  return request<AppAxios.PageData<RobOrderItem>>({
+    url: ROB_ORDER_API,
     params,
   });
 }
 
-// 新增抢购订单
-export function createRushOrder(data: RushOrderCreateForm) {
-  return request({
-    url: RUSH_ORDER_API,
-    method: 'post',
-    data,
-  }, {
-    loading: true,
-    successMessage: true,
+// 获取启用用户下拉选项
+export function fetchUserOptions() {
+  return request<UserOption[]>({
+    url: '/api/users/options',
   });
 }
 
-// 编辑抢购订单
-export function updateRushOrder(data: RushOrderUpdateForm) {
+// 转移订单
+export function transferRobOrder(data: RobOrderTransferForm) {
   return request({
-    url: RUSH_ORDER_API,
+    url: `${ROB_ORDER_API}/transfer`,
     method: 'put',
     data,
   }, {
@@ -72,15 +76,13 @@ export function updateRushOrder(data: RushOrderUpdateForm) {
   });
 }
 
-// 删除抢购订单
-export function deleteRushOrder(id: number) {
+// 取消订单
+export function cancelRobOrder(id: number) {
   return request({
-    url: RUSH_ORDER_API,
-    method: 'delete',
-    data: {
-      ids: [id],
-    },
+    url: `${ROB_ORDER_API}/cancel/${id}`,
+    method: 'put',
   }, {
     loading: true,
+    successMessage: true,
   });
 }
