@@ -84,7 +84,10 @@ function handleShow() {
   isShow.value = true;
 }
 
-onMounted(async () => {
+watch(isShow, async (value) => {
+  if (!value)
+    return;
+
   await getAllIconCollections();
   await fetchIconAllList(allIconCollections.value);
 });
