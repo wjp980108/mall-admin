@@ -36,7 +36,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       label: '操作',
       type: 'operation',
       fixed: 'right',
-      width: 120,
+      width: 130,
       align: 'center',
       buttons: [
         {
