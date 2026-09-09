@@ -23,7 +23,7 @@ const settings = reactive<SystemSettingsUpdateForm>({
 const limitRuleOptions = [
   { label: '不限购', value: 0 },
   { label: '同一场次限购一次', value: 1 },
-  { label: '同一商品限购一次', value: 2 },
+  { label: '当天限购一次', value: 2 },
 ];
 
 function assignSettings(data: SystemSettings) {
