@@ -26,8 +26,6 @@ const rules = computed<FormRules>(() => ({
   sessionName: { required: true, message: '请输入场次名称', trigger: 'blur' },
   rushStartTime: { required: true, message: '请选择抢购开始时间', trigger: 'change' },
   rushEndTime: { required: true, message: '请选择抢购结束时间', trigger: 'change' },
-  beforeForbidMinute: { required: true, message: '请输入开场前禁止委托时间', trigger: 'blur' },
-  afterForbidMinute: { required: true, message: '请输入结束后禁止委托时间', trigger: 'blur' },
   bgImg: { required: true, message: '请上传场次背景图', trigger: 'change' },
   sort: { required: true, message: '请输入显示顺序', trigger: 'blur' },
 }));
@@ -80,12 +78,6 @@ async function handleConfirm() {
             />
           </app-form-item>
         </app-flex>
-      </app-form-item>
-      <app-form-item label="开场前禁止委托时间" prop="beforeForbidMinute" help-info="单位：分钟">
-        <el-input-number v-model="state.beforeForbidMinute" :min="0" :precision="0" />
-      </app-form-item>
-      <app-form-item label="结束后禁止委托时间" prop="afterForbidMinute" help-info="单位：分钟">
-        <el-input-number v-model="state.afterForbidMinute" :min="0" :precision="0" />
       </app-form-item>
       <app-form-item label="场次背景图" prop="bgImg">
         <app-upload v-model="state.bgImg" type="image" :api="uploadBgImg" />

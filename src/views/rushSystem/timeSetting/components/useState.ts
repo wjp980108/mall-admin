@@ -8,8 +8,6 @@ export const useState = createSharedComposable(() => {
     sessionName: '',
     rushStartTime: '',
     rushEndTime: '',
-    beforeForbidMinute: 0,
-    afterForbidMinute: 0,
     bgImg: '',
     bgImgPlatform: 'local-1',
     sort: 0,

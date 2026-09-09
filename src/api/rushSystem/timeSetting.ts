@@ -5,8 +5,6 @@ export interface RushTimeSettingItem {
   sessionName: string;
   rushStartTime: string;
   rushEndTime: string;
-  beforeForbidMinute: number;
-  afterForbidMinute: number;
   bgImg: string;
   bgImgPlatform: string;
   sort: number;

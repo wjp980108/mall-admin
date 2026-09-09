@@ -31,20 +31,6 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       align: 'center',
       renderContent: ({ row }) => (<>{`${row.rushStartTime} 至 ${row.rushEndTime}`}</>),
     },
-    {
-      prop: 'beforeForbidMinute',
-      label: '开场前禁止委托时间',
-      helpInfo: '单位：分钟',
-      width: 170,
-      align: 'center',
-    },
-    {
-      prop: 'afterForbidMinute',
-      label: '结束后禁止委托时间',
-      helpInfo: '单位：分钟',
-      width: 170,
-      align: 'center',
-    },
     { type: 'img', prop: 'bgImg', label: '场次背景图', width: 120 },
     {
       prop: 'status',
