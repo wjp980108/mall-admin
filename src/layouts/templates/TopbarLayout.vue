@@ -4,11 +4,13 @@ import HeaderActions from '@/layouts/header/Actions.vue';
 import BaseMenu from '@/layouts/menu/BaseMenu.vue';
 import Content from '@/layouts/shared/Content.vue';
 import Tabs from '@/layouts/shared/Tabs.vue';
+import { useAppStore } from '@/stores/app';
 
 defineOptions({ name: 'TopbarLayout' });
 
 const router = useRouter();
-const name = import.meta.env.VITE_APP_NAME;
+const appStore = useAppStore();
+const { siteLogo, siteName } = storeToRefs(appStore);
 const homePage = import.meta.env.VITE_HOME_PATH;
 
 const headerRef = useTemplateRef<HTMLElement>('headerRef');
@@ -21,8 +23,12 @@ const isCompact = computed(() => width.value <= 405);
     <el-header>
       <div ref="headerRef" class="topbar p-[8px_12px] border-b">
         <div class="top-logo flex-center shrink-0 cursor-pointer" @click="router.push(homePage)">
-          <el-image class="w-36" :src="logo" alt="Logo" />
-          <span class="ml-[var(--spacing-sm)] whitespace-nowrap text-20px font-bold">{{ name }}</span>
+          <el-image class="w-36" :src="siteLogo || logo" alt="Logo">
+            <template #error>
+              <img class="w-36" :src="logo" alt="Logo">
+            </template>
+          </el-image>
+          <span class="ml-[var(--spacing-sm)] whitespace-nowrap text-20px font-bold">{{ siteName }}</span>
         </div>
         <BaseMenu class="top-menu" mode="horizontal" />
         <HeaderActions :compact="isCompact" />

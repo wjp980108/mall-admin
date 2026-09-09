@@ -9,6 +9,7 @@ import { renderIcon } from '@/components';
 import { Constant } from '@/enums/common';
 import Locale from '@/layouts/header/Locale.vue';
 import ThemeSwitch from '@/layouts/header/ThemeSwitch.vue';
+import { useAppStore } from '@/stores/app';
 import { useUserStore } from '@/stores/user';
 import { storage } from '@/utils/storage';
 
@@ -17,8 +18,9 @@ defineOptions({ name: 'Login' });
 const router = useRouter();
 const { t } = useI18n();
 const userStore = useUserStore();
+const appStore = useAppStore();
+const { siteLogo, siteName } = storeToRefs(appStore);
 
-const appName = import.meta.env.VITE_APP_NAME;
 const checked = ref(false);
 
 const state = reactive<LoginReq>({
@@ -94,6 +96,10 @@ useEventListener('keypress', ({ code }) => {
   if (['Enter', 'NumpadEnter'].includes(code) && !disabled.value && !loading.value)
     handleLogin();
 });
+
+function handleLogoError(event: Event) {
+  (event.target as HTMLImageElement).src = logo;
+}
 </script>
 
 <template>
@@ -279,9 +285,9 @@ useEventListener('keypress', ({ code }) => {
       <div class="login-wrapper">
         <!-- Logo -->
         <div class="logo">
-          <img class="logo-icon" :src="logo" alt="logo">
+          <img class="logo-icon" :src="siteLogo || logo" alt="logo" @error="handleLogoError">
           <h1 class="logo-title">
-            {{ appName }}
+            {{ siteName }}
           </h1>
         </div>
         <!-- 登录表单 -->
@@ -320,7 +326,7 @@ useEventListener('keypress', ({ code }) => {
         <div class="login-footer">
           Copyright © 2024-{{ dayjs().year() }}
           <el-link href="https://blog.wjp.plus" target="_blank" underline="never">
-            &nbsp;{{ appName }}
+            &nbsp;{{ siteName }}
           </el-link>
         </div>
       </div>

@@ -19,7 +19,9 @@ async function setupApp() {
   // 注册模块 Pinia
   installPinia(app);
   // 提前实例化 app store
-  useAppStore();
+  const appStore = useAppStore();
+  // 加载公开站点信息，供登录页与后台布局共用
+  void appStore.fetchSiteSettings();
   // 注册模块 Vue-router
   await installRouter(app);
   // 注册全局自定义指令

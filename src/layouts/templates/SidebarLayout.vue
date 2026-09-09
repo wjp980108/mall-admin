@@ -10,10 +10,9 @@ import { useAppStore } from '@/stores/app';
 defineOptions({ name: 'SidebarLayout' });
 
 const appStore = useAppStore();
-const { breadcrumbShow, collapse } = storeToRefs(appStore);
+const { breadcrumbShow, collapse, siteLogo, siteName } = storeToRefs(appStore);
 
 const router = useRouter();
-const name = import.meta.env.VITE_APP_NAME;
 const homePage = import.meta.env.VITE_HOME_PATH;
 
 const headerRef = useTemplateRef<HTMLElement>('headerRef');
@@ -35,8 +34,12 @@ watchEffect(() => {
   <el-container>
     <el-aside :width="collapse ? '65px' : '210px'">
       <div class="logo flex-center cursor-pointer" @click="router.push(homePage)">
-        <el-image class="w-50" :src="logo" alt="Logo" />
-        <span v-show="!collapse" class="logo-text">{{ name }}</span>
+        <el-image class="w-50" :src="siteLogo || logo" alt="Logo">
+          <template #error>
+            <img class="w-50" :src="logo" alt="Logo">
+          </template>
+        </el-image>
+        <span v-show="!collapse" class="logo-text">{{ siteName }}</span>
       </div>
       <el-scrollbar>
         <BaseMenu :collapse unique-opened />

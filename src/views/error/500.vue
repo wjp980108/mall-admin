@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
+import { useAppStore } from '@/stores/app';
 
 defineOptions({ name: '500' });
 
 const { t } = useI18n();
 const router = useRouter();
-const appName = import.meta.env.VITE_APP_NAME;
+const appStore = useAppStore();
+const { siteName } = storeToRefs(appStore);
 
 // 跳转首页, 并清空历史记录
 function backToHome() {
@@ -69,7 +71,7 @@ function goBack() {
       <div class="footer">
         {{ t('page.500.subtitle') }} © {{ dayjs().year() }}
         <el-link type="primary" href="https://blog.wjp.plus" target="_blank" underline="never">
-          {{ appName }}
+          {{ siteName }}
         </el-link>
       </div>
     </div>

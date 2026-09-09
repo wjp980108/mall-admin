@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
+import { useAppStore } from '@/stores/app';
 
 defineOptions({ name: 'LayoutFooter' });
 
-const appName = import.meta.env.VITE_APP_NAME;
+const appStore = useAppStore();
+const { siteName } = storeToRefs(appStore);
 </script>
 
 <template>
   <el-footer>
     Copyright © 2024-{{ dayjs().format('YYYY') }}
     <el-link href="https://github.com/wjp980108/meet-admin" target="_blank" underline="never">
-      &nbsp;{{ appName }}
+      &nbsp;{{ siteName }}
     </el-link>
   </el-footer>
 </template>

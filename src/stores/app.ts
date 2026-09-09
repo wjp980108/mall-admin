@@ -2,6 +2,7 @@ import type { BasicColorSchema } from '@vueuse/core';
 import type { AppConfig } from '@/config/settings.ts';
 import type { LocaleType } from '@/constants/locale';
 import { cloneDeep } from 'lodash-es';
+import { fetchPublicSystemSettings } from '@/api';
 import { setDayjsLocale } from '@/config/dayjs.ts';
 import { i18n } from '@/config/i18n.ts';
 import { applyAsideInverted, applyThemeColor, defaultSettings } from '@/config/settings.ts';
@@ -23,6 +24,9 @@ export const useAppStore = defineStore('app-store', () => {
 
   // 系统设置抽屉在布局模板切换时也需保持打开状态
   const settingPanelShow = ref(false);
+  const siteName = ref(import.meta.env.VITE_APP_NAME);
+  const siteLogo = ref('');
+  const pageTitle = ref('');
 
   // 解析后的实际配色（auto 跟随系统）
   const colorScheme = computed(() => {
@@ -75,6 +79,24 @@ export const useAppStore = defineStore('app-store', () => {
       // 过渡结束、伪元素移除后再释放动画，避免 forwards 填充的动画常驻
       transition.finished.finally(() => animation.cancel());
     });
+  }
+
+  function setDocumentTitle(title: string) {
+    pageTitle.value = title;
+    document.title = title ? `${title} - ${siteName.value}` : siteName.value;
+  }
+
+  async function fetchSiteSettings() {
+    try {
+      const res = await fetchPublicSystemSettings();
+
+      siteName.value = res.data.siteName || import.meta.env.VITE_APP_NAME;
+      siteLogo.value = res.data.siteLogo || '';
+      setDocumentTitle(pageTitle.value);
+    }
+    catch (error) {
+      console.error('获取公开系统设置失败：', error);
+    }
   }
 
   const { isFullscreen, toggle } = useFullscreen();
@@ -133,9 +155,13 @@ export const useAppStore = defineStore('app-store', () => {
     ...toRefs(state.value),
     colorMode,
     settingPanelShow,
+    siteName,
+    siteLogo,
     colorScheme,
     isDark,
     setColorMode,
+    fetchSiteSettings,
+    setDocumentTitle,
     fullscreen: isFullscreen,
     toggleFullScreen: toggle,
     reloadPage,

@@ -5,6 +5,11 @@ export interface LoginReq {
   password: string;
 }
 
+export interface PublicSystemSettings {
+  siteName: string;
+  siteLogo: string;
+}
+
 // 登录
 export function login(data: LoginReq) {
   return request({
@@ -77,5 +82,14 @@ export function uploadImage(data: FormData) {
   }, {
     cancelDuplicateRequest: false,
     loading: '上传中...',
+  });
+}
+
+// 公开查询系统设置
+export function fetchPublicSystemSettings() {
+  return request<PublicSystemSettings>({
+    url: '/api/settings/public',
+  }, {
+    errorMessage: false,
   });
 }

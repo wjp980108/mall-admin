@@ -10,7 +10,7 @@ defineOptions({ name: 'Layout' });
 
 const appStore = useAppStore();
 const userStore = useUserStore();
-const { watermark, locale, isDark, layout } = storeToRefs(appStore);
+const { watermark, locale, isDark, layout, siteName } = storeToRefs(appStore);
 
 const router = useRouter();
 const currentRoute = useRoute();
@@ -22,7 +22,7 @@ watch(locale, async () => {
 
 const watermarkContent = computed(() => {
   const { nickname } = userStore.userInfo;
-  return watermark.value ? `${nickname || import.meta.env.VITE_APP_NAME} ${dayjs().format('YYYY-MM-DD')}` : '';
+  return watermark.value ? `${nickname || siteName.value} ${dayjs().format('YYYY-MM-DD')}` : '';
 });
 
 const watermarkFont = computed(() => ({
