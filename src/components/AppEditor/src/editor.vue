@@ -89,10 +89,9 @@ const mergedEditorConfig = computed<EditorConfig>(() => {
           formData.append('file', file);
 
           try {
-            const res = await uploadImage(formData);
-            const data = res.data[0];
-            // 插入图片到编辑器
-            insertFn(`${VITE_BASE_URL}${data.savePath}`, data.alt || '', data.href || '');
+            const { data: imageUrl } = await uploadImage(formData);
+            // 上传接口返回完整图片地址，直接插入，避免重复拼接 API 地址
+            insertFn(imageUrl);
           }
           catch (error: any) {
             ElMessage.error(error.message);

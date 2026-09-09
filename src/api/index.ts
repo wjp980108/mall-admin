@@ -72,7 +72,7 @@ export function uploadFile(params: FormData) {
 
 // 上传图片
 export function uploadImage(data: FormData) {
-  return request({
+  return request<string>({
     url: '/api/file/upload',
     method: 'post',
     data,
