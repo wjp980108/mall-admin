@@ -2,7 +2,7 @@
 import type { IDomEditor } from '@wangeditor-next/editor';
 import type { AppEditorProps, EditorConfig } from './editor.ts';
 import { Editor, Toolbar } from '@wangeditor-next/editor-for-vue';
-import { formContextKey, formItemContextKey, useZIndex } from 'element-plus';
+import { formContextKey, formItemContextKey } from 'element-plus';
 import { uploadFile, uploadImage } from '@/api';
 import '@wangeditor-next/editor/dist/css/style.css';
 
@@ -30,16 +30,12 @@ const { VITE_BASE_URL } = import.meta.env;
 
 const valueHtml = defineModel({ type: String, default: '' });
 
-const { nextZIndex } = useZIndex();
-const zIndex = ref(0);
-
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef<IDomEditor>();
 
 // 实列化编辑器
 function handleCreated(editor: IDomEditor) {
   editorRef.value = editor;
-  zIndex.value = nextZIndex();
 }
 
 // 获取 el-form 组件上下文
@@ -57,12 +53,6 @@ watch(isDisabled, (disabled) => {
   else
     editorRef.value?.enable();
 }, { immediate: true });
-
-// 编辑框获取焦点时触发
-function handleFocus() {
-  // 获取焦点时更新层级，防止同时使用 editor 时，被覆盖问题
-  zIndex.value = nextZIndex();
-}
 
 // 编辑框失去焦点时触发
 function handleBlur() {
@@ -138,7 +128,7 @@ onBeforeUnmount(() => {
     />
     <Editor
       v-model="valueHtml" class="app-editor-content" :default-config="mergedEditorConfig" :mode="mode"
-      @on-created="handleCreated" @on-blur="handleBlur" @on-focus="handleFocus"
+      @on-created="handleCreated" @on-blur="handleBlur"
     />
   </div>
 </template>
@@ -152,7 +142,6 @@ onBeforeUnmount(() => {
 
 .app-editor {
   width: 100%;
-  z-index: v-bind(zIndex);
   border-radius: var(--el-border-radius-base);
 
   &-toolbar {
