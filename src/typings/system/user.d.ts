@@ -8,7 +8,7 @@ declare namespace User {
     nickname: string;
     phone: string;
     avatar: string;
-    platform: Platform;
+    avatarPlatform: Platform;
     email: string;
     gender: 0 | 1 | 2;
     roleIds: number[];

@@ -9,7 +9,7 @@ export const useState = createSharedComposable(() => {
     nickname: '',
     phone: '',
     avatar: '',
-    platform: 'local-1',
+    avatarPlatform: 'local-1',
     email: '',
     gender: 0,
     roleIds: [],

@@ -36,7 +36,7 @@ const uploadPlatformOptions = Object.entries(fileStoragePlatform);
 
 // 上传头像
 function uploadAvatar(data: FormData) {
-  data.append('platform', state.value.platform);
+  data.append('avatarPlatform', state.value.avatarPlatform);
   return uploadImage(data);
 }
 
@@ -80,7 +80,7 @@ async function handleConfirm() {
         <app-upload v-model="state.avatar" type="image" :api="uploadAvatar" />
       </app-form-item>
       <app-form-item label="存储平台" help-info="头像需要存储到那个平台下">
-        <el-select v-model="state.platform" placeholder="请选择存储平台" :disabled="!!state.avatar" :clearable="false">
+        <el-select v-model="state.avatarPlatform" placeholder="请选择存储平台" :disabled="!!state.avatar" :clearable="false">
           <el-option
             v-for="[value, label] in uploadPlatformOptions" :key="value" :label="label" :value="value"
           />
