@@ -25,6 +25,8 @@ export interface RobOrderItem {
   buyerId: number;
   buyerName: string;
   buyerPhone: string;
+  receiverName: string;
+  receiveAddress: string;
   buyerAvatar: string;
   inviterId: number | null;
   inviterName: string | null;

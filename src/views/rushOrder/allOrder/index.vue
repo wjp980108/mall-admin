@@ -56,6 +56,9 @@ const { tableProps, params, resetParams, getTableData } = useTable({
         </div>
       ),
     },
+    { prop: 'receiverName', label: '收货人', width: 120, showOverflowTooltip: true },
+    { prop: 'buyerPhone', label: '收货手机号', width: 140 },
+    { prop: 'receiveAddress', label: '收货地址', minWidth: 180, showOverflowTooltip: true },
     {
       label: '所属场次',
       minWidth: 160,
