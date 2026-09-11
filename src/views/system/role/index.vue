@@ -31,7 +31,6 @@ const { tableProps, params, resetParams, getTableData } = useTable({
         );
       },
     },
-    { prop: 'remark', label: '备注', minWidth: 160, showOverflowTooltip: true },
     {
       label: '操作',
       type: 'operation',

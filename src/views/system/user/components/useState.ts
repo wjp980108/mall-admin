@@ -14,7 +14,6 @@ export const useState = createSharedComposable(() => {
     gender: 0,
     roleIds: [],
     status: true,
-    remark: '',
   }));
 
   const showForm = ref(false);

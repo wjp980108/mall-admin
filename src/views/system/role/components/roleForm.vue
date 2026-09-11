@@ -111,9 +111,6 @@ async function handleConfirm() {
           <el-radio label="禁用" :value="false" />
         </el-radio-group>
       </app-form-item>
-      <app-form-item label="备注" prop="remark" :span="2">
-        <el-input v-model="state.remark" type="textarea" :rows="3" placeholder="请输入备注" />
-      </app-form-item>
     </app-form>
   </app-drawer>
 </template>

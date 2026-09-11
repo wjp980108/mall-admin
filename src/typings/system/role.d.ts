@@ -3,7 +3,6 @@ declare namespace Role {
     id: number;
     roleName: string;
     status: boolean;
-    remark: string;
     menuIds: number[];
   }
 }

@@ -13,7 +13,6 @@ declare namespace User {
     gender: 0 | 1 | 2;
     roleIds: number[];
     status: boolean;
-    remark: string;
   }
 
   interface CurrentUser {

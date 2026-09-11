@@ -6,7 +6,6 @@ export const useState = createSharedComposable(() => {
     id: 0,
     roleName: '',
     status: true,
-    remark: '',
     menuIds: [],
   }));
 
