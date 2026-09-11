@@ -22,7 +22,7 @@ const { tableProps, getTableData } = useTable({
       label: '公告内容',
       width: 500,
       renderContent: ({ row }) => {
-        return <div vHtml={row.content} />;
+        return <div v-html={row.content} />;
       },
     },
     {
