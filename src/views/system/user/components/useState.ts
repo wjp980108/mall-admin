@@ -19,7 +19,8 @@ export const useState = createSharedComposable(() => {
 
   const showForm = ref(false);
 
-  function setState(val: AnyObj) {
+  function setState(val: User.Item) {
+    val.avatar = val.avatar || '';
     Object.assign(state.value, pick(val, Object.keys(state.value)));
     showForm.value = true;
   }
