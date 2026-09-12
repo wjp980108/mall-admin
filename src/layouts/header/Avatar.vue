@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { renderIcon } from '@/components';
+import ChangePassword from '@/layouts/header/ChangePassword.vue';
 import { useUserStore } from '@/stores/user';
 
 defineOptions({ name: 'LayoutAvatar' });
@@ -8,10 +9,16 @@ defineOptions({ name: 'LayoutAvatar' });
 const router = useRouter();
 const { t } = useI18n();
 const userStore = useUserStore();
+const changePasswordVisible = ref(false);
 
 function handleSelect(val: string) {
   if (val === 'userCenter') {
     router.push('/profile');
+    return;
+  }
+
+  if (val === 'editPassword') {
+    changePasswordVisible.value = true;
     return;
   }
 
@@ -56,6 +63,7 @@ function handleSelect(val: string) {
       </el-dropdown-menu>
     </template>
   </el-dropdown>
+  <ChangePassword v-model="changePasswordVisible" />
 </template>
 
 <i18n lang="yaml">

@@ -13,3 +13,17 @@ export function updateProfile(data: ProfileUpdateForm) {
     successMessage: true,
   });
 }
+
+// 修改当前登录用户密码
+export function changePassword(password: string) {
+  return request({
+    url: '/api/users/password',
+    method: 'put',
+    data: {
+      password,
+    },
+  }, {
+    loading: true,
+    successMessage: true,
+  });
+}
