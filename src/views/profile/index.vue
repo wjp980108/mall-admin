@@ -14,7 +14,6 @@ const formRef = useTemplateRef<FormInstance>('formRef');
 const saving = ref(false);
 
 const profile = reactive<ProfileUpdateForm>({
-  id: 0,
   nickname: '',
   phone: '',
   email: '',
@@ -24,21 +23,24 @@ const profile = reactive<ProfileUpdateForm>({
 });
 
 const userInfo = computed(() => userStore.userInfo);
-const userInitial = computed(() => userInfo.value.nickname?.charAt(0).toUpperCase() || 'U');
+const requiresPhone = computed(() => userInfo.value.username !== 'admin');
 const uploadPlatformOptions = Object.entries(fileStoragePlatform);
 
-const rules: FormRules<ProfileUpdateForm> = {
+const rules = computed<FormRules<ProfileUpdateForm>>(() => ({
   nickname: { required: true, message: '请输入昵称', trigger: 'blur' },
-  phone: [
-    { required: true, message: '请输入手机号', trigger: 'blur' },
-    { pattern: new RegExp(Regex.Phone), message: '请输入正确的手机号', trigger: 'blur' },
-  ],
+  ...(requiresPhone.value
+    ? {
+        phone: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { pattern: new RegExp(Regex.Phone), message: '请输入正确的手机号', trigger: 'blur' },
+        ],
+      }
+    : {}),
   email: { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' },
-};
+}));
 
 function resetProfile() {
   Object.assign(profile, {
-    id: userInfo.value.id,
     nickname: userInfo.value.nickname ?? '',
     phone: userInfo.value.phone ?? '',
     email: userInfo.value.email ?? '',
@@ -59,7 +61,14 @@ async function handleSave() {
     await formRef.value?.validate();
     saving.value = true;
 
-    await updateProfile(profile);
+    await updateProfile({
+      avatar: profile.avatar,
+      avatarPlatform: profile.avatarPlatform,
+      email: profile.email,
+      gender: profile.gender,
+      nickname: profile.nickname,
+      ...(requiresPhone.value ? { phone: profile.phone } : {}),
+    });
 
     const { data } = await fetchUserInfo();
     userStore.userInfo = data;
@@ -77,32 +86,24 @@ onMounted(resetProfile);
 </script>
 
 <template>
-  <div class="main-container profile-page">
+  <div class="profile-page">
     <app-card class="profile-card">
       <div class="profile-card__header">
         <div>
-          <h2>个人信息</h2>
-          <p>修改后会同步更新当前登录账号的信息。</p>
+          <h2 class="m-0">
+            个人信息
+          </h2>
+          <p class="m-0">
+            修改后会同步更新当前登录账号的信息。
+          </p>
         </div>
       </div>
 
       <el-divider />
 
-      <app-form ref="formRef" :model="profile" :rules :cols="2" label-width="88px">
+      <app-form ref="formRef" :model="profile" :rules="rules" :cols="2" label-width="88px">
         <app-form-item label="头像" prop="avatar">
-          <app-upload
-            v-model="profile.avatar" type="image" :api="uploadAvatar" circle width="80px"
-            height="80px"
-          >
-            <template #trigger>
-              <el-avatar :size="80" class="profile-avatar">
-                {{ userInitial }}
-              </el-avatar>
-            </template>
-            <template #tip>
-              <span />
-            </template>
-          </app-upload>
+          <app-upload v-model="profile.avatar" type="image" :api="uploadAvatar" />
         </app-form-item>
         <app-form-item label="存储平台" help-info="头像将上传到所选平台">
           <el-select
@@ -124,7 +125,7 @@ onMounted(resetProfile);
             show-word-limit
           />
         </app-form-item>
-        <app-form-item label="手机号" prop="phone">
+        <app-form-item v-if="requiresPhone" label="手机号" prop="phone">
           <el-input v-model="profile.phone" placeholder="请输入手机号" maxlength="11" />
         </app-form-item>
         <app-form-item label="邮箱" prop="email">
@@ -144,10 +145,7 @@ onMounted(resetProfile);
           </el-radio-group>
         </app-form-item>
       </app-form>
-
-      <el-divider />
-
-      <div class="profile-card__actions">
+      <div class="flex justify-end">
         <el-button @click="resetProfile">
           重置
         </el-button>
@@ -162,31 +160,11 @@ onMounted(resetProfile);
 <style scoped lang="scss">
 .profile-card {
   &__header {
-    h2,
-    p {
-      margin: 0;
-    }
-
-    h2 {
-      font-size: 18px;
-      font-weight: 600;
-    }
-
     p {
       margin-top: var(--spacing-xs);
       color: var(--el-text-color-secondary);
       font-size: 13px;
     }
   }
-
-  &__actions {
-    display: flex;
-    justify-content: flex-end;
-  }
-}
-
-.profile-avatar {
-  color: #fff;
-  background: var(--el-color-primary);
 }
 </style>

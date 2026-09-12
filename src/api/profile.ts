@@ -1,11 +1,19 @@
+import type { Platform } from '@/constants/common.ts';
 import request from '@/utils/axios';
 
-export type ProfileUpdateForm = Pick<User.CurrentUser, 'id' | 'nickname' | 'phone' | 'email' | 'gender' | 'avatar' | 'avatarPlatform'>;
+export interface ProfileUpdateForm {
+  avatar: string;
+  avatarPlatform?: Platform;
+  email?: string;
+  gender?: 0 | 1 | 2;
+  nickname?: string;
+  phone?: string;
+}
 
-// 更新个人资料；后端提供当前用户专用接口后，仅需调整此处的请求地址和载荷。
+// 更新当前登录用户的资料
 export function updateProfile(data: ProfileUpdateForm) {
   return request({
-    url: '/api/users',
+    url: '/api/users/profile',
     method: 'put',
     data,
   }, {
