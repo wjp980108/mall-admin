@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus';
-import type { LoginReq } from '@/api';
+import type { Login } from '@/api';
 import dayjs from 'dayjs';
 import { login } from '@/api';
 import logo from '@/assets/images/logo.png';
@@ -12,6 +12,7 @@ import ThemeSwitch from '@/layouts/header/ThemeSwitch.vue';
 import { useAppStore } from '@/stores/app';
 import { useUserStore } from '@/stores/user';
 import { storage } from '@/utils/storage';
+import ForgotPassword from '@/views/login/components/ForgotPassword.vue';
 
 defineOptions({ name: 'Login' });
 
@@ -22,8 +23,9 @@ const appStore = useAppStore();
 const { siteLogo, siteName } = storeToRefs(appStore);
 
 const checked = ref(false);
+const forgotPasswordVisible = ref(false);
 
-const state = reactive<LoginReq>({
+const state = reactive<Login>({
   account: '',
   password: '',
 });
@@ -31,7 +33,7 @@ const state = reactive<LoginReq>({
 // 获取用户账号
 async function getUserConfig() {
   try {
-    const rss = await storage.getItem<LoginReq>(Constant.LoginAccount, '');
+    const rss = await storage.getItem<Login>(Constant.LoginAccount, '');
 
     if (!rss)
       return;
@@ -306,7 +308,7 @@ function handleLogoError(event: Event) {
               <el-checkbox v-model="checked">
                 {{ t('page.login.rememberMe') }}
               </el-checkbox>
-              <el-link type="primary" underline="never">
+              <el-link type="primary" underline="never" @click="forgotPasswordVisible = true">
                 {{ t('page.login.forget') }}
               </el-link>
             </div>
@@ -331,6 +333,7 @@ function handleLogoError(event: Event) {
         </div>
       </div>
     </div>
+    <ForgotPassword v-model="forgotPasswordVisible" />
   </div>
 </template>
 

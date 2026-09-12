@@ -1,6 +1,6 @@
 import request from '@/utils/axios';
 
-export interface LoginReq {
+export interface Login {
   account: string;
   password: string;
 }
@@ -11,11 +11,23 @@ export interface PublicSystemSettings {
 }
 
 // 登录
-export function login(data: LoginReq) {
+export function login(data: Login) {
   return request({
     url: '/api/auth/login',
     method: 'post',
     data,
+  });
+}
+
+// 忘记密码
+export function forgotPassword(data: Login) {
+  return request({
+    url: '/api/auth/forgot-password',
+    method: 'put',
+    data,
+  }, {
+    loading: true,
+    successMessage: '密码重置成功，请使用新密码登录',
   });
 }
 
