@@ -64,12 +64,12 @@ const disabled = ref(false);
 
 // 点击登录
 async function handleLogin() {
-  await formRef.value?.validate();
-
-  loading.value = true;
-  disabled.value = true;
-
   try {
+    await formRef.value?.validate();
+
+    loading.value = true;
+    disabled.value = true;
+
     const res = await login(state);
     userStore.accessToken = res.data.token;
 

@@ -36,13 +36,9 @@ const rules: FormRules<typeof form.value> = {
 };
 
 async function handleConfirm() {
-  if (!formRef.value)
-    return;
-
-  await formRef.value.validate();
-
-  saving.value = true;
   try {
+    await formRef.value?.validate();
+    saving.value = true;
     await forgotPassword({
       account: form.value.account,
       password: form.value.password,
