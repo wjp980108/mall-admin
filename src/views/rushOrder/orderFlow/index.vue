@@ -2,6 +2,7 @@
 import { fetchRobOrderFlowList, fetchRobOrderFlowSummary } from '@/api/rushOrder/orderFlow';
 import { useTable } from '@/components';
 import { useDatePickerShortcuts } from '@/hooks/useDatePickerShortcuts';
+import { timeFormat } from '@/utils/date.ts';
 import { moneyThousand } from '@/utils/money';
 import OrderFlowDetailDrawer from './components/orderFlowDetailDrawer.vue';
 
@@ -18,7 +19,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
   apiFunc: fetchRobOrderFlowList,
   apiParams: {
     operateType: undefined,
-    timeRange: ['', ''],
+    timeRange: [timeFormat(), timeFormat()],
   },
   isPagination: true,
   columns: () => [
