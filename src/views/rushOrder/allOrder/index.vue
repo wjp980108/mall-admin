@@ -1,5 +1,10 @@
 <script setup lang="tsx">
-import type { RobOrderItem, UserOption } from '@/api/rushOrder/allOrder';
+import type {
+  InsufficientPointsUser,
+  RobOrderItem,
+  RobOrderOperationData,
+  UserOption,
+} from '@/api/rushOrder/allOrder';
 import {
   cancelRobOrder,
   fetchRobOrderList,
@@ -7,7 +12,6 @@ import {
   transferRobOrder,
 } from '@/api/rushOrder/allOrder';
 import { useTable } from '@/components';
-import { useConfirm } from '@/hooks/useConfirm';
 
 defineOptions({ name: 'RushOrderAllOrder' });
 
@@ -144,10 +148,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
           icon: 'CircleClose',
           show: ({ row }) => row.orderStatus === 1,
           auth: 'system:allOrder:cancel',
-          onClick: async ({ row }) => {
-            await useConfirm(cancelRobOrder, row.id, '取消该订单');
-            await getTableData();
-          },
+          onClick: ({ row }) => handleCancel(row),
         },
       ],
     },
@@ -162,6 +163,94 @@ const transferForm = reactive({
   newBuyerId: undefined as number | undefined,
 });
 
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : '操作失败，请稍后重试';
+}
+
+async function confirmInsufficientPoints(users: InsufficientPointsUser[], message: string) {
+  const insufficientUsers = users.filter(user => user.pointsInsufficient);
+
+  try {
+    await ElMessageBox.confirm(
+      <div class="text-14 leading-6">
+        <p>{message}</p>
+        {insufficientUsers.length > 0 && (
+          <el-descriptions class="mt-12" column={1} size="small" border>
+            <el-descriptions-item label="积分不足用户">
+              {insufficientUsers.map(user => (
+                <div key={user.userId} class="not-last:mb-4">
+                  {user.nickname}
+                  {' · '}
+                  {user.phone}
+                  {' · '}
+                  {user.identityName}
+                </div>
+              ))}
+            </el-descriptions-item>
+          </el-descriptions>
+        )}
+      </div>,
+      '积分不足确认',
+      {
+        confirmButtonText: '仍然继续',
+        cancelButtonText: '取消',
+        type: '',
+        draggable: true,
+      },
+    );
+    return true;
+  }
+  catch {
+    return false;
+  }
+}
+
+async function executeOrderOperation(
+  operation: (confirmInsufficient: boolean) => AppAxios.ApiPromise<RobOrderOperationData | null>,
+  onInsufficientPoints?: () => void,
+) {
+  try {
+    let result = await operation(false);
+    const users = result.data?.users;
+    if (users !== undefined) {
+      onInsufficientPoints?.();
+      if (!await confirmInsufficientPoints(users, result.msg))
+        return false;
+
+      result = await operation(true);
+    }
+
+    ElMessage.success(result.msg);
+    return true;
+  }
+  catch (error) {
+    ElMessage.error(getErrorMessage(error));
+    return false;
+  }
+}
+
+async function handleCancel(row: RobOrderItem) {
+  try {
+    await ElMessageBox.confirm('是否取消该订单？', '操作提示', {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+      draggable: true,
+    });
+  }
+  catch {
+    return;
+  }
+
+  const completed = await executeOrderOperation(confirmInsufficient => cancelRobOrder({
+    orderId: row.id,
+    confirmInsufficient,
+  }));
+
+  if (completed)
+    await getTableData();
+}
+
 async function openTransfer(row: RobOrderItem) {
   transferForm.orderId = row.id;
   transferForm.newBuyerId = undefined;
@@ -175,19 +264,26 @@ async function openTransfer(row: RobOrderItem) {
 }
 
 async function handleTransfer() {
-  if (!transferForm.newBuyerId) {
+  const newBuyerId = transferForm.newBuyerId;
+  if (!newBuyerId) {
     ElMessage.warning('请选择转移后的用户');
     return;
   }
 
   transferLoading.value = true;
   try {
-    await transferRobOrder({
+    const completed = await executeOrderOperation(confirmInsufficient => transferRobOrder({
       orderId: transferForm.orderId,
-      newBuyerId: transferForm.newBuyerId,
+      newBuyerId,
+      confirmInsufficient,
+    }), () => {
+      transferVisible.value = false;
     });
-    transferVisible.value = false;
-    await getTableData();
+
+    if (completed) {
+      transferVisible.value = false;
+      await getTableData();
+    }
   }
   finally {
     transferLoading.value = false;

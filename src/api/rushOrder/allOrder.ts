@@ -44,6 +44,28 @@ export interface RobOrderListParams {
 export interface RobOrderTransferForm {
   orderId: number;
   newBuyerId: number;
+  /** 积分不足时管理员确认仍继续执行 */
+  confirmInsufficient?: boolean;
+}
+
+export interface RobOrderCancelForm {
+  orderId: number;
+  /** 积分不足时管理员确认仍继续执行 */
+  confirmInsufficient?: boolean;
+}
+
+export interface InsufficientPointsUser {
+  userId: number;
+  nickname: string;
+  phone: string;
+  identityType: number;
+  identityName: string;
+  pointsInsufficient: boolean;
+}
+
+export interface RobOrderOperationData {
+  /** 存在时表示有用户积分不足，需要二次确认 */
+  users?: InsufficientPointsUser[];
 }
 
 export interface UserOption {
@@ -68,23 +90,26 @@ export function fetchUserOptions() {
 
 // 转移订单
 export function transferRobOrder(data: RobOrderTransferForm) {
-  return request({
+  return request<RobOrderOperationData | null>({
     url: `${ROB_ORDER_API}/transfer`,
     method: 'put',
     data,
   }, {
     loading: true,
-    successMessage: true,
+    successMessage: false,
+    errorMessage: false,
   });
 }
 
 // 取消订单
-export function cancelRobOrder(id: number) {
-  return request({
-    url: `${ROB_ORDER_API}/cancel/${id}`,
+export function cancelRobOrder(data: RobOrderCancelForm) {
+  return request<RobOrderOperationData | null>({
+    url: `${ROB_ORDER_API}/cancel`,
     method: 'put',
+    data,
   }, {
     loading: true,
-    successMessage: true,
+    successMessage: false,
+    errorMessage: false,
   });
 }
