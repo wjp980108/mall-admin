@@ -74,6 +74,14 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       minWidth: 120,
       money: { highlightNegativeAmounts: true },
     },
+    { type: 'money', prop: 'paymentAmount', label: '付款金额', minWidth: 120 },
+    {
+      type: 'money',
+      prop: 'receiptAmount',
+      label: '回款金额',
+      minWidth: 120,
+      helpInfo: '（付款金额 + 自购奖）* 数量',
+    },
     { prop: 'sessionName', label: '场次', minWidth: 180, showOverflowTooltip: true },
     { prop: 'remark', label: '备注', minWidth: 180, showOverflowTooltip: true },
     {

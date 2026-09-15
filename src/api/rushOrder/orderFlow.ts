@@ -19,6 +19,8 @@ export interface RobOrderFlowItem {
   quantity: number;
   unitPrice: number;
   signedTotalAmount: number;
+  paymentAmount: number;
+  receiptAmount: number;
   operatorId: number;
   operatorName: string;
   remark: string;
