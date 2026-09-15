@@ -23,6 +23,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     { type: 'index', fixed: 'left' },
     { prop: 'goodsName', label: '商品名称', width: 240, showOverflowTooltip: true },
     { type: 'money', prop: 'goodsPrice', label: '商品价格' },
+    { type: 'money', prop: 'paymentAmount', label: '付款金额' },
     { type: 'img', prop: 'coverImg', label: '商品缩略图', width: 110 },
     {
       prop: 'status',

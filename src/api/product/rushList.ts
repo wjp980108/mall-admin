@@ -4,6 +4,7 @@ export interface RushProductItem {
   id: number;
   goodsName: string;
   goodsPrice: number;
+  paymentAmount: number;
   coverImg: string;
   coverImgPlatform: string;
   detailImg: string;

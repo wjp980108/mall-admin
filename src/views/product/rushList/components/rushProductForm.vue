@@ -37,6 +37,7 @@ const formRef = useTemplateRef<FormInstance>('formRef');
 const rules = computed<FormRules>(() => ({
   goodsName: { required: true, message: '请输入商品名称', trigger: 'blur' },
   goodsPrice: { required: true, message: '请输入商品价格', trigger: 'blur' },
+  paymentAmount: { required: true, message: '请输入付款金额', trigger: 'blur' },
   coverImg: { required: true, message: '请上传商品缩略图', trigger: 'change' },
   detailImg: { required: true, message: '请上传商品详情图', trigger: 'change' },
   currentStatus: { required: true, message: '请输入商品当前状态', trigger: 'blur' },
@@ -71,6 +72,15 @@ async function handleConfirm() {
       </app-form-item>
       <app-form-item label="商品价格" prop="goodsPrice">
         <el-input-number v-model="state.goodsPrice" :min="0" :precision="2" />
+      </app-form-item>
+      <app-form-item label="付款金额" prop="paymentAmount">
+        <el-input-number v-model="state.paymentAmount" :min="0" :precision="2" />
+      </app-form-item>
+      <app-form-item label="上架状态" prop="onlineStatus">
+        <el-radio-group v-model="state.onlineStatus">
+          <el-radio label="上架" :value="true" />
+          <el-radio label="下架" :value="false" />
+        </el-radio-group>
       </app-form-item>
       <app-form-item label="商品缩略图" prop="coverImg">
         <app-upload v-model="state.coverImg" type="image" :api="uploadCarousel" />
@@ -109,12 +119,6 @@ async function handleConfirm() {
       </app-form-item>
       <app-form-item label="商品详情" prop="goodsDetail" :span="2">
         <app-editor v-model="state.goodsDetail" />
-      </app-form-item>
-      <app-form-item label="上架状态" prop="onlineStatus">
-        <el-radio-group v-model="state.onlineStatus">
-          <el-radio label="上架" :value="true" />
-          <el-radio label="下架" :value="false" />
-        </el-radio-group>
       </app-form-item>
     </app-form>
   </app-drawer>
