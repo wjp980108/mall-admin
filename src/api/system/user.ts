@@ -4,17 +4,85 @@ export interface UserListParams {
   username: string;
 }
 
-export type UserCreateForm = Omit<User.Item, 'id'>;
-export type UserUpdateForm = User.Item;
+export type UserCreateForm = Omit<User.Form, 'id'>;
+export type UserUpdateForm = User.Form;
 export interface UserUpdateStatus {
   userId: number;
   status: boolean;
+}
+
+export interface UserRelationItem {
+  id: number;
+  username: string;
+  nickname: string;
+  phone: string;
+  status: boolean;
+  createTime: string;
+  inviteCode: string;
+  memberType: 0 | 1;
+}
+
+export interface UserRelations {
+  upline: UserRelationItem | null;
+  downlines: UserRelationItem[];
+}
+
+export interface UserPointsBalance {
+  points: number;
+  couponPoints: number;
+}
+
+export interface UserPointsFlow {
+  id: number;
+  amount: number;
+  remark: string | null;
+  bizType: 1 | 2 | 3 | 4;
+  bizTypeName: string;
+  orderId: number | null;
+  orderNo: string | null;
+  flowType: 1 | 2 | 3 | 4;
+  flowTypeName: string;
+  accountType: 1 | 2;
+  accountTypeName: string;
+  beforePoints: number;
+  afterPoints: number;
+  counterpartyUserId: number | null;
+  counterpartyName: string | null;
+  createTime: string;
+}
+
+export interface UserPointsDetail extends AppAxios.PageData<UserPointsFlow> {
+  current: number;
+  pages: number;
+  size: number;
+  balance: UserPointsBalance;
+}
+
+export interface UserPointsParams {
+  pageNum: number;
+  pageSize: number;
+  bizType?: UserPointsFlow['bizType'];
 }
 
 // 获取用户列表
 export function fetchUserList(params: UserListParams) {
   return request<AppAxios.PageData<User.Item>>({
     url: '/api/users',
+    params,
+  });
+}
+
+// 查询用户上下级邀请关系
+export function fetchUserRelations(id: number) {
+  return request<UserRelations>({
+    url: `/api/users/relations/${id}`,
+  });
+}
+
+// 查询用户积分详情
+export function fetchUserPoints(id: number, params: UserPointsParams) {
+  return request<UserPointsDetail>({
+    url: `/api/users/points/${id}`,
     params,
   });
 }

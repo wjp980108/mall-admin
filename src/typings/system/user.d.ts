@@ -13,7 +13,10 @@ declare namespace User {
     gender: 0 | 1 | 2;
     roleIds: number[];
     status: boolean;
+    createTime: string;
   }
+
+  type Form = Omit<Item, 'createTime'>;
 
   interface CurrentUser {
     id: number;

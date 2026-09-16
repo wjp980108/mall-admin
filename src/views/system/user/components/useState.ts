@@ -2,7 +2,7 @@ import { pick } from 'lodash-es';
 import { useReset } from '@/hooks/useReset';
 
 export const useState = createSharedComposable(() => {
-  const [state, reset] = useReset<User.Item>(() => ({
+  const [state, reset] = useReset<User.Form>(() => ({
     id: 0,
     username: '',
     password: '',

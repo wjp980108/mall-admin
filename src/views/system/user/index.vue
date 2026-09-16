@@ -3,11 +3,15 @@ import { deleteUser, fetchUserList, updateUserStatus } from '@/api/system/user';
 import { renderIcon, useTable } from '@/components';
 import { useConfirm } from '@/hooks/useConfirm';
 import UserForm from '@/views/system/user/components/userForm.vue';
+import UserPointsDrawer from '@/views/system/user/components/userPointsDrawer.vue';
+import UserRelationDrawer from '@/views/system/user/components/userRelationDrawer.vue';
 import { useState } from '@/views/system/user/components/useState.ts';
 
 defineOptions({ name: 'SystemUser' });
 
 const { showForm, setState } = useState();
+const relationDrawerRef = useTemplateRef<InstanceType<typeof UserRelationDrawer>>('relationDrawerRef');
+const pointsDrawerRef = useTemplateRef<InstanceType<typeof UserPointsDrawer>>('pointsDrawerRef');
 
 const GENDER_MAP = {
   0: { label: '未知', type: 'info' },
@@ -50,13 +54,24 @@ const { tableProps, params, resetParams, getTableData } = useTable({
         );
       },
     },
+    { type: 'dateTime', prop: 'createTime', label: '创建时间' },
     {
       label: '操作',
       type: 'operation',
       fixed: 'right',
-      width: 190,
+      width: 290,
       align: 'center',
       buttons: [
+        {
+          label: '上下级关系',
+          icon: 'Connection',
+          onClick: ({ row }) => relationDrawerRef.value?.open(row),
+        },
+        {
+          label: '积分详情',
+          icon: 'Coin',
+          onClick: ({ row }) => pointsDrawerRef.value?.open(row),
+        },
         {
           label: '编辑',
           icon: 'EditPen',
@@ -106,5 +121,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       </template>
     </app-table>
     <UserForm @confirm="getTableData" />
+    <UserRelationDrawer ref="relationDrawerRef" />
+    <UserPointsDrawer ref="pointsDrawerRef" />
   </div>
 </template>
