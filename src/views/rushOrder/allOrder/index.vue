@@ -12,6 +12,7 @@ import {
   transferRobOrder,
 } from '@/api/rushOrder/allOrder';
 import { useTable } from '@/components';
+import { moneyThousand } from '@/utils/money';
 
 defineOptions({ name: 'RushOrderAllOrder' });
 
@@ -19,6 +20,14 @@ const ORDER_STATUS_MAP = {
   1: { label: '正常', type: 'success' },
   2: { label: '已取消', type: 'info' },
 } as const;
+
+function renderAmount(amount: number, colorClass: string) {
+  return (
+    <span class={['font-600', colorClass]}>
+      {moneyThousand(amount)}
+    </span>
+  );
+}
 
 const { tableProps, params, resetParams, getTableData } = useTable({
   apiFunc: fetchRobOrderList,
@@ -105,21 +114,32 @@ const { tableProps, params, resetParams, getTableData } = useTable({
         </div>
       ),
     },
-    { type: 'money', prop: 'totalAmount', label: '金额', minWidth: 120 },
+    {
+      prop: 'totalAmount',
+      label: '金额',
+      minWidth: 120,
+      align: 'right',
+      renderContent: ({ row }) => renderAmount(row.totalAmount, 'text-[var(--el-color-primary)]'),
+    },
     {
       label: '推荐奖',
       minWidth: 150,
       renderContent: ({ row }) => (
         <div>
           <div>{row.inviterId ? `#${row.inviterId} · ${row.inviterName}` : '无推荐人'}</div>
-          <div class="text-danger text-12">
-            ¥
-            {row.recommendAmount}
+          <div class="text-12">
+            {renderAmount(row.recommendAmount, 'text-[var(--el-color-warning)]')}
           </div>
         </div>
       ),
     },
-    { type: 'money', prop: 'profitAmount', label: '利润', minWidth: 120 },
+    {
+      prop: 'profitAmount',
+      label: '利润',
+      minWidth: 120,
+      align: 'right',
+      renderContent: ({ row }) => renderAmount(row.profitAmount, 'text-[var(--el-color-success)]'),
+    },
     {
       label: '状态',
       width: 100,

@@ -9,6 +9,7 @@ import {
 } from '@/api/rushSystem/sessionProduct';
 import { renderIcon } from '@/components';
 import { useConfirm } from '@/hooks/useConfirm';
+import { moneyThousand } from '@/utils/money';
 import SessionProductSelector from './sessionProductSelector.vue';
 
 defineOptions({ name: 'SessionProductDrawer' });
@@ -18,6 +19,10 @@ const selectProductVisible = ref(false);
 const loading = ref(false);
 const currentSession = ref<RushTimeSettingItem>();
 const sessionProducts = ref<SessionProductItem[]>([]);
+
+function renderAmount(amount: number) {
+  return <span class="text-[var(--el-color-primary)] font-600">{moneyThousand(amount)}</span>;
+}
 
 const title = computed(() => {
   return currentSession.value ? `关联商品 · ${currentSession.value.sessionName}` : '关联商品';
@@ -48,7 +53,7 @@ const sessionProductColumns = computed<TableColumns<SessionProductItem>>(() => [
       </div>
     ),
   },
-  { type: 'money', prop: 'price', label: '商品售价', width: 120 },
+  { prop: 'price', label: '商品售价', width: 120, align: 'right', renderContent: ({ row }) => renderAmount(row.price) },
   {
     label: '场次库存',
     width: 180,

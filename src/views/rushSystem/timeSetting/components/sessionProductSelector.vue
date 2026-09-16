@@ -8,6 +8,7 @@ import {
   createSessionProducts,
   fetchSessionProductCandidates,
 } from '@/api/rushSystem/sessionProduct';
+import { moneyThousand } from '@/utils/money';
 
 defineOptions({ name: 'SessionProductSelector' });
 
@@ -31,6 +32,10 @@ const batchSort = ref(0);
 const productTableRef = useTemplateRef<TableInstance>('productTableRef');
 const linkedGoodsIdSet = computed(() => new Set(props.linkedGoodsIds));
 
+function renderAmount(amount: number) {
+  return <span class="text-[var(--el-color-primary)] font-600">{moneyThousand(amount)}</span>;
+}
+
 const productColumns = computed<TableColumns<SessionProductCandidateItem>>(() => [
   {
     type: 'selection',
@@ -50,7 +55,7 @@ const productColumns = computed<TableColumns<SessionProductCandidateItem>>(() =>
       </div>
     ),
   },
-  { type: 'money', prop: 'goodsPrice', label: '售价', width: 120 },
+  { prop: 'goodsPrice', label: '售价', width: 120, align: 'right', renderContent: ({ row }) => renderAmount(row.goodsPrice) },
 ]);
 
 watch(visible, (value) => {

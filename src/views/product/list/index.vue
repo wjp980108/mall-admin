@@ -6,12 +6,17 @@ import {
 } from '@/api/product/list';
 import { renderIcon, useTable } from '@/components';
 import { useConfirm } from '@/hooks/useConfirm';
+import { moneyThousand } from '@/utils/money';
 import ProductForm from './components/productForm.vue';
 import { useState } from './components/useState.ts';
 
 defineOptions({ name: 'ProductList' });
 
 const { showForm, setState } = useState();
+
+function renderAmount(amount: number) {
+  return <span class="text-[var(--el-color-primary)] font-600">{moneyThousand(amount)}</span>;
+}
 
 const { tableProps, params, resetParams, getTableData } = useTable({
   apiFunc: fetchProductList,
@@ -24,7 +29,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     { type: 'index', fixed: 'left' },
     { prop: 'goodsName', label: '商品名称', width: 150, showOverflowTooltip: true },
     { type: 'img', prop: 'goodsThumb', label: '商品缩略图', width: 110 },
-    { type: 'money', prop: 'price', label: '商品价格' },
+    { prop: 'price', label: '商品价格', align: 'right', renderContent: ({ row }) => renderAmount(row.price) },
     { prop: 'stock', label: '库存', width: 100 },
     { prop: 'sales', label: '销量', width: 100 },
     {

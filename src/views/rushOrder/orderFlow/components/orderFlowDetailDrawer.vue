@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { RobOrderFlowDetail, RobOrderFlowItem } from '@/api/rushOrder/orderFlow';
 import { fetchRobOrderFlowDetail } from '@/api/rushOrder/orderFlow';
+import { moneyThousand } from '@/utils/money';
 
 defineOptions({ name: 'OrderFlowDetailDrawer' });
 
@@ -49,7 +50,7 @@ defineExpose({ open });
             #{{ orderDetail.buyerId }} · {{ orderDetail.buyerName }} · {{ orderDetail.buyerPhone }}
           </el-descriptions-item>
           <el-descriptions-item label="订单金额">
-            ¥{{ orderDetail.totalAmount }}
+            <span class="text-[var(--el-color-primary)] font-600">¥{{ moneyThousand(orderDetail.totalAmount) }}</span>
           </el-descriptions-item>
           <el-descriptions-item label="场次">
             {{ orderDetail.sessionName }}（{{ orderDetail.rushStartTime }} ~ {{ orderDetail.rushEndTime }}）

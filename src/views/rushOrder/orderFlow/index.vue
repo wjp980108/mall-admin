@@ -15,6 +15,10 @@ const summaryLoading = ref(false);
 
 const formattedTotalAmount = computed(() => moneyThousand(totalAmount.value));
 
+function renderAmount(amount: number, colorClass: string) {
+  return <span class={['font-600', colorClass]}>{moneyThousand(amount)}</span>;
+}
+
 const { tableProps, params, resetParams, getTableData } = useTable({
   apiFunc: fetchRobOrderFlowList,
   apiParams: {
@@ -69,19 +73,29 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       ),
     },
     {
-      type: 'money',
       prop: 'signedTotalAmount',
       label: '订单金额',
       minWidth: 120,
-      money: { highlightNegativeAmounts: true },
+      align: 'right',
+      renderContent: ({ row }) => renderAmount(
+        row.signedTotalAmount,
+        row.signedTotalAmount < 0 ? 'text-[var(--el-color-danger)]' : 'text-[var(--el-color-primary)]',
+      ),
     },
-    { type: 'money', prop: 'paymentAmount', label: '付款金额', minWidth: 120 },
     {
-      type: 'money',
+      prop: 'paymentAmount',
+      label: '付款金额',
+      minWidth: 120,
+      align: 'right',
+      renderContent: ({ row }) => renderAmount(row.paymentAmount, 'text-[var(--el-color-warning)]'),
+    },
+    {
       prop: 'receiptAmount',
       label: '回款金额',
       minWidth: 120,
+      align: 'right',
       helpInfo: '（付款金额 + 自购奖）* 数量',
+      renderContent: ({ row }) => renderAmount(row.receiptAmount, 'text-[var(--el-color-success)]'),
     },
     { prop: 'sessionName', label: '场次', minWidth: 180, showOverflowTooltip: true },
     { prop: 'remark', label: '备注', minWidth: 180, showOverflowTooltip: true },

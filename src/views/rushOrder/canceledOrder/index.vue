@@ -1,8 +1,13 @@
 <script setup lang="tsx">
 import { fetchCanceledRushOrderList } from '@/api/rushOrder/canceledOrder';
 import { useTable } from '@/components';
+import { moneyThousand } from '@/utils/money';
 
 defineOptions({ name: 'RushOrderCanceledOrder' });
+
+function renderAmount(amount: number) {
+  return <span class="text-[var(--el-color-primary)] font-600">{moneyThousand(amount)}</span>;
+}
 
 const { params, resetParams, tableProps, getTableData } = useTable({
   apiFunc: fetchCanceledRushOrderList,
@@ -21,7 +26,7 @@ const { params, resetParams, tableProps, getTableData } = useTable({
     { prop: 'buyerId', label: '买方ID', width: 100 },
     { prop: 'buyerPhone', label: '买家收款手机号', width: 130 },
     { prop: 'buyerName', label: '买家姓名', width: 120, showOverflowTooltip: true },
-    { type: 'money', prop: 'rushPrice', label: '金额' },
+    { prop: 'rushPrice', label: '金额', align: 'right', renderContent: ({ row }) => renderAmount(row.rushPrice) },
     { prop: 'receiveAddress', label: '收货地址', minWidth: 180, showOverflowTooltip: true },
     { type: 'dateTime', prop: 'createTime', label: '取消时间' },
   ],

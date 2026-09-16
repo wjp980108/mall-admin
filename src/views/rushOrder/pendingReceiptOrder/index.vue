@@ -20,9 +20,9 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     { prop: 'orderNo', label: '订单号', width: 170, fixed: 'left' },
     { prop: 'goodsName', label: '商品名称', minWidth: 160, showOverflowTooltip: true },
     { prop: 'buyerName', label: '购买人', minWidth: 120, showOverflowTooltip: true },
-    { type: 'money', prop: 'productPrice', label: '商品单价' },
+    { type: 'money', prop: 'productPrice', label: '商品单价', align: 'right', className: 'amount-primary' },
     { prop: 'quantity', label: '购买数量', width: 100 },
-    { type: 'money', prop: 'totalAmount', label: '订单金额' },
+    { type: 'money', prop: 'totalAmount', label: '订单金额', align: 'right', className: 'amount-primary' },
     { prop: 'orderStatusName', label: '订单状态', width: 120, align: 'center' },
     { prop: 'receiverName', label: '收货人', width: 120, showOverflowTooltip: true },
     { prop: 'buyerPhone', label: '收货手机号', width: 140 },
@@ -67,7 +67,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
 </script>
 
 <template>
-  <div class="main-container">
+  <div class="main-container pending-receipt-order">
     <app-card>
       <app-form
         show-action inline :loading="tableProps.loading" @search="getTableData"
@@ -87,3 +87,12 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="getTableData" />
   </div>
 </template>
+
+<style scoped lang="scss">
+.pending-receipt-order {
+  :deep(.amount-primary .el-text) {
+    color: var(--el-color-primary);
+    font-weight: 600;
+  }
+}
+</style>

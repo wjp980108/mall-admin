@@ -1,8 +1,13 @@
 <script setup lang="tsx">
 import { fetchRushConsignmentRecordList } from '@/api/rushOrder/consignmentRecord';
 import { useTable } from '@/components';
+import { moneyThousand } from '@/utils/money';
 
 defineOptions({ name: 'RushConsignmentRecord' });
+
+function renderAmount(amount: number, colorClass: string) {
+  return <span class={['font-600', colorClass]}>{moneyThousand(amount)}</span>;
+}
 
 const { params, resetParams, tableProps, getTableData } = useTable({
   apiFunc: fetchRushConsignmentRecordList,
@@ -22,8 +27,18 @@ const { params, resetParams, tableProps, getTableData } = useTable({
     { prop: 'sellerName', label: '卖家姓名', width: 120, showOverflowTooltip: true },
     { prop: 'goodsId', label: '商品ID', width: 120 },
     { prop: 'goodsName', label: '商品名', minWidth: 160, showOverflowTooltip: true },
-    { type: 'money', prop: 'rushPrice', label: '商品价格' },
-    { type: 'money', prop: 'putCommission', label: '上架手续费' },
+    {
+      prop: 'rushPrice',
+      label: '商品价格',
+      align: 'right',
+      renderContent: ({ row }) => renderAmount(row.rushPrice, 'text-[var(--el-color-primary)]'),
+    },
+    {
+      prop: 'putCommission',
+      label: '上架手续费',
+      align: 'right',
+      renderContent: ({ row }) => renderAmount(row.putCommission, 'text-[var(--el-color-warning)]'),
+    },
     { prop: 'consignmentType', label: '委托类型', width: 120 },
     { prop: 'reviewStatus', label: '审核状态', width: 120 },
     { type: 'dateTime', prop: 'createTime', label: '下单时间' },

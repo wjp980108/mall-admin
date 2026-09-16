@@ -22,7 +22,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
   columns: () => [
     { prop: 'orderNo', label: '订单号', width: 170, fixed: 'left' },
     { prop: 'goodsName', label: '商品名称', width: 160, showOverflowTooltip: true },
-    { type: 'money', prop: 'price', label: '价格' },
+    { type: 'money', prop: 'price', label: '价格', align: 'right', className: 'amount-primary' },
     { type: 'dateTime', prop: 'bidAt', label: '拍下时间' },
     { prop: 'remainingPaymentTime', label: '当前剩余付款时间', width: 160 },
     { prop: 'buyerId', label: '买家ID', width: 120 },
@@ -86,7 +86,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
 </script>
 
 <template>
-  <div class="main-container">
+  <div class="main-container pending-payment-order">
     <app-card>
       <app-form
         show-action inline :loading="tableProps.loading" @search="getTableData"
@@ -107,3 +107,12 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     <PendingPaymentOrderForm @confirm="getTableData" />
   </div>
 </template>
+
+<style scoped lang="scss">
+.pending-payment-order {
+  :deep(.amount-primary .el-text) {
+    color: var(--el-color-primary);
+    font-weight: 600;
+  }
+}
+</style>

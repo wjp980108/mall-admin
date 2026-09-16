@@ -6,12 +6,17 @@ import {
 } from '@/api/product/rushList.ts';
 import { renderIcon, useTable } from '@/components';
 import { useConfirm } from '@/hooks/useConfirm';
+import { moneyThousand } from '@/utils/money';
 import RushProductForm from './components/rushProductForm.vue';
 import { useState } from './components/useState.ts';
 
 defineOptions({ name: 'RushProductList' });
 
 const { showForm, setState } = useState();
+
+function renderAmount(amount: number, colorClass: string) {
+  return <span class={['font-600', colorClass]}>{moneyThousand(amount)}</span>;
+}
 
 const { tableProps, params, resetParams, getTableData } = useTable({
   apiFunc: fetchRushProductList,
@@ -22,8 +27,18 @@ const { tableProps, params, resetParams, getTableData } = useTable({
   columns: () => [
     { type: 'index', fixed: 'left' },
     { prop: 'goodsName', label: '商品名称', width: 240, showOverflowTooltip: true },
-    { type: 'money', prop: 'goodsPrice', label: '商品价格' },
-    { type: 'money', prop: 'paymentAmount', label: '付款金额' },
+    {
+      prop: 'goodsPrice',
+      label: '商品价格',
+      align: 'right',
+      renderContent: ({ row }) => renderAmount(row.goodsPrice, 'text-[var(--el-color-primary)]'),
+    },
+    {
+      prop: 'paymentAmount',
+      label: '付款金额',
+      align: 'right',
+      renderContent: ({ row }) => renderAmount(row.paymentAmount, 'text-[var(--el-color-warning)]'),
+    },
     { type: 'img', prop: 'coverImg', label: '商品缩略图', width: 110 },
     {
       prop: 'status',
