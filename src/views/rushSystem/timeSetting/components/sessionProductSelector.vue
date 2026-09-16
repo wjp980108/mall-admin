@@ -44,7 +44,7 @@ const productColumns = computed<TableColumns<SessionProductCandidateItem>>(() =>
     renderContent: ({ row }) => (
       <div class="flex items-center gap-8">
         {row.coverImg && (
-          <ElImage class="h-40 w-40 shrink-0 rounded-4" src={row.coverImg} fit="cover" />
+          <ElImage class="h-40 w-40 shrink-0 rounded-4" src={row.coverImg} fit="cover" preview-teleported />
         )}
         <span class="truncate">{row.goodsName}</span>
       </div>

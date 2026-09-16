@@ -90,6 +90,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
             src={row.goodsThumb}
             fit="cover"
             preview-src-list={[row.goodsThumb]}
+            preview-teleported
           />
           <div class="min-w-0">
             <div class="truncate">{row.goodsName}</div>
