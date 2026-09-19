@@ -30,6 +30,8 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     { prop: 'username', label: '用户名', minWidth: 120 },
     { prop: 'nickname', label: '昵称', minWidth: 120 },
     { prop: 'phone', label: '手机号', width: 130 },
+    { prop: 'roleNames', label: '角色', minWidth: 120 },
+    { prop: 'inviteCode', label: '邀请码', minWidth: 120 },
     { prop: 'email', label: '邮箱', minWidth: 160, showOverflowTooltip: true },
     {
       prop: 'gender',
