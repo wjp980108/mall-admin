@@ -7,11 +7,13 @@ import type {
 } from '@/api/rushOrder/allOrder';
 import {
   cancelRobOrder,
+  confirmRobOrderPay,
   fetchRobOrderList,
   fetchUserOptions,
   transferRobOrder,
 } from '@/api/rushOrder/allOrder';
 import { useTable } from '@/components';
+import { useConfirm } from '@/hooks/useConfirm';
 import { moneyThousand } from '@/utils/money';
 
 defineOptions({ name: 'RushOrderAllOrder' });
@@ -19,6 +21,13 @@ defineOptions({ name: 'RushOrderAllOrder' });
 const ORDER_STATUS_MAP = {
   1: { label: '正常', type: 'success' },
   2: { label: '已取消', type: 'info' },
+} as const;
+
+const PAY_STATUS_MAP = {
+  0: { label: '未收款', type: 'warning' },
+  1: { label: '已收款', type: 'primary' },
+  2: { label: '已回款', type: 'success' },
+  3: { label: '无效', type: 'info' },
 } as const;
 
 function renderAmount(amount: number, colorClass: string) {
@@ -35,6 +44,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     timeRange: ['', ''],
     keyword: '',
     orderStatus: undefined,
+    payStatus: undefined,
   },
   isPagination: true,
   columns: () => [
@@ -150,16 +160,37 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       },
     },
     {
+      label: '收款/回款状态',
+      width: 120,
+      align: 'center',
+      renderContent: ({ row }) => {
+        const status = PAY_STATUS_MAP[row.payStatus];
+        return <ElTag type={status.type}>{status.label}</ElTag>;
+      },
+    },
+    {
       label: '操作',
       type: 'operation',
       fixed: 'right',
-      width: 180,
+      width: 280,
       align: 'center',
       buttons: [
         {
+          label: '确认收款',
+          icon: 'CircleCheck',
+          show: ({ row }) => row.orderStatus === 1 && row.payStatus === 0,
+          onClick: ({ row }) => handleConfirmPay(row, 1),
+        },
+        {
+          label: '确认回款',
+          icon: 'CircleCheck',
+          show: ({ row }) => row.orderStatus === 1 && row.payStatus === 1,
+          onClick: ({ row }) => handleConfirmPay(row, 2),
+        },
+        {
           label: '转移订单',
           icon: 'Switch',
-          show: ({ row }) => row.orderStatus === 1,
+          show: ({ row }) => row.orderStatus === 1 && row.payStatus === 0,
           auth: 'system:allOrder:shift',
           onClick: ({ row }) => openTransfer(row),
         },
@@ -167,7 +198,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
           label: '取消订单',
           type: 'danger',
           icon: 'CircleClose',
-          show: ({ row }) => row.orderStatus === 1,
+          show: ({ row }) => row.orderStatus === 1 && (row.payStatus === 0 || row.payStatus === 1),
           auth: 'system:allOrder:cancel',
           onClick: ({ row }) => handleCancel(row),
         },
@@ -270,6 +301,12 @@ async function handleCancel(row: RobOrderItem) {
 
   if (completed)
     await getTableData();
+}
+
+async function handleConfirmPay(row: RobOrderItem, action: 1 | 2) {
+  const actionName = action === 1 ? '确认收款' : '确认回款';
+  await useConfirm(confirmRobOrderPay, { orderId: row.id, action }, actionName);
+  await getTableData();
 }
 
 async function openTransfer(row: RobOrderItem) {

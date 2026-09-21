@@ -32,6 +32,8 @@ export interface RobOrderItem {
   inviterName: string | null;
   orderStatus: 1 | 2;
   orderStatusName: string;
+  /** 收款回款状态：0 未收款、1 已收款、2 已回款、3 无效 */
+  payStatus: 0 | 1 | 2 | 3;
   createTime: string;
 }
 
@@ -39,6 +41,7 @@ export interface RobOrderListParams {
   timeRange: [string, string];
   keyword: string;
   orderStatus?: 1 | 2;
+  payStatus?: RobOrderItem['payStatus'];
 }
 
 export interface RobOrderTransferForm {
@@ -52,6 +55,12 @@ export interface RobOrderCancelForm {
   orderId: number;
   /** 积分不足时管理员确认仍继续执行 */
   confirmInsufficient?: boolean;
+}
+
+export interface RobOrderConfirmPayForm {
+  orderId: number;
+  /** 动作：1 确认收款、2 确认回款 */
+  action: 1 | 2;
 }
 
 export interface InsufficientPointsUser {
@@ -111,5 +120,16 @@ export function cancelRobOrder(data: RobOrderCancelForm) {
     loading: true,
     successMessage: false,
     errorMessage: false,
+  });
+}
+
+// 确认收款/回款
+export function confirmRobOrderPay(data: RobOrderConfirmPayForm) {
+  return request({
+    url: `${ROB_ORDER_API}/confirmPay`,
+    method: 'put',
+    data,
+  }, {
+    loading: true,
   });
 }
