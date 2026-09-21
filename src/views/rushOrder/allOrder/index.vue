@@ -162,6 +162,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     {
       label: '收款/回款状态',
       width: 120,
+      fixed: 'right',
       align: 'center',
       renderContent: ({ row }) => {
         const status = PAY_STATUS_MAP[row.payStatus];
