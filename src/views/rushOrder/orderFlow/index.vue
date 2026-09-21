@@ -1,4 +1,5 @@
 <script setup lang="tsx">
+import type { RobOrderFlowSummary } from '@/api/rushOrder/orderFlow';
 import { fetchRobOrderFlowList, fetchRobOrderFlowSummary } from '@/api/rushOrder/orderFlow';
 import { useTable } from '@/components';
 import { useDatePickerShortcuts } from '@/hooks/useDatePickerShortcuts';
@@ -10,10 +11,32 @@ defineOptions({ name: 'RushOrderOrderFlow' });
 
 const detailDrawerRef = useTemplateRef<InstanceType<typeof OrderFlowDetailDrawer>>('detailDrawerRef');
 const { shortcuts: dateShortcuts } = useDatePickerShortcuts();
-const totalAmount = ref(0);
+const summary = ref<RobOrderFlowSummary>({
+  net: {
+    totalAmount: 0,
+  },
+  totalReceiptAmount: 0,
+  stationServiceFee: 0,
+  techServiceFee: 0,
+  salesAward: 0,
+  orderProfitDiff: 0,
+  totalPaymentAmount: 0,
+});
 const summaryLoading = ref(false);
 
-const formattedTotalAmount = computed(() => moneyThousand(totalAmount.value));
+const summaryItems = computed(() => [
+  { label: '总订单金额', amount: summary.value.net.totalAmount, colorClass: 'text-[var(--el-color-primary)]' },
+  { label: '回款总金额', amount: summary.value.totalReceiptAmount, colorClass: 'text-[var(--el-color-success)]' },
+  { label: '站长服务费', amount: summary.value.stationServiceFee, colorClass: 'text-[var(--el-color-warning)]' },
+  { label: '技术服务费', amount: summary.value.techServiceFee, colorClass: 'text-[var(--el-color-warning)]' },
+  { label: '销售奖', amount: summary.value.salesAward, colorClass: 'text-[var(--el-color-warning)]' },
+  {
+    label: '订单利润差',
+    amount: summary.value.orderProfitDiff,
+    colorClass: summary.value.orderProfitDiff < 0 ? 'text-[var(--el-color-danger)]' : 'text-[var(--el-color-primary)]',
+  },
+  { label: '付款总金额', amount: summary.value.totalPaymentAmount, colorClass: 'text-[var(--el-color-primary)]' },
+]);
 
 function renderAmount(amount: number, colorClass: string) {
   return <span class={['font-600', colorClass]}>{moneyThousand(amount)}</span>;
@@ -24,6 +47,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
   apiParams: {
     operateType: undefined,
     timeRange: [timeFormat(), timeFormat()],
+    keyword: '',
   },
   isPagination: true,
   columns: () => [
@@ -90,12 +114,12 @@ const { tableProps, params, resetParams, getTableData } = useTable({
       renderContent: ({ row }) => renderAmount(row.paymentAmount, 'text-[var(--el-color-warning)]'),
     },
     {
-      prop: 'receiptAmount',
+      prop: 'receiptRoundAmount',
       label: '回款金额',
       minWidth: 120,
       align: 'right',
       helpInfo: '（付款金额 + 自购奖）* 数量',
-      renderContent: ({ row }) => renderAmount(row.receiptAmount, 'text-[var(--el-color-success)]'),
+      renderContent: ({ row }) => renderAmount(row.receiptRoundAmount, 'text-[var(--el-color-success)]'),
     },
     { prop: 'sessionName', label: '场次', minWidth: 180, showOverflowTooltip: true },
     { prop: 'remark', label: '备注', minWidth: 180, showOverflowTooltip: true },
@@ -122,7 +146,7 @@ async function getSummary() {
     const { data } = await fetchRobOrderFlowSummary({
       timeRange: params.value.timeRange.filter(Boolean).join(',') || undefined,
     });
-    totalAmount.value = data.net.totalAmount;
+    summary.value = data;
   }
   finally {
     summaryLoading.value = false;
@@ -149,6 +173,9 @@ onMounted(() => {
         show-action inline :loading="tableProps.loading || summaryLoading" @search="refreshData"
         @reset="resetParams"
       >
+        <app-form-item label="关键字">
+          <el-input v-model="params.keyword" clearable placeholder="请输入买家信息" />
+        </app-form-item>
         <app-form-item label="订单类型">
           <el-select v-model="params.operateType" clearable placeholder="请选择订单类型">
             <el-option label="下单" :value="1" />
@@ -165,12 +192,12 @@ onMounted(() => {
       </app-form>
     </app-card>
     <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="refreshData">
-      <template #header-left>
-        <app-flex align="center">
-          <span>汇总：</span>
-          <app-flex align="center" :size="8">
-            <span class="text-14 text-[var(--el-text-color-secondary)]">总订单金额</span>
-            <span class="text-16 text-[var(--el-color-primary)] font-600">¥{{ formattedTotalAmount }}</span>
+      <template #header>
+        <app-flex align="center" :size="16" wrap>
+          <span class="text-16 font-600">汇总：</span>
+          <app-flex v-for="item in summaryItems" :key="item.label" align="center" :size="8">
+            <span class="text-14 text-[var(--el-text-color-secondary)]">{{ item.label }}</span>
+            <span class="text-16 font-600" :class="item.colorClass">¥{{ moneyThousand(item.amount) }}</span>
           </app-flex>
         </app-flex>
       </template>

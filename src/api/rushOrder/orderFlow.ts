@@ -21,6 +21,7 @@ export interface RobOrderFlowItem {
   signedTotalAmount: number;
   paymentAmount: number;
   receiptAmount: number;
+  receiptRoundAmount: number;
   operatorId: number;
   operatorName: string;
   remark: string;
@@ -29,6 +30,7 @@ export interface RobOrderFlowItem {
 export interface RobOrderFlowListParams {
   operateType?: 1 | 2 | 3;
   timeRange: [string, string];
+  keyword: string;
 }
 
 export interface RobOrderFlowEvent {
@@ -88,6 +90,12 @@ export interface RobOrderFlowSummary {
   net: {
     totalAmount: number;
   };
+  totalReceiptAmount: number;
+  stationServiceFee: number;
+  techServiceFee: number;
+  salesAward: number;
+  orderProfitDiff: number;
+  totalPaymentAmount: number;
 }
 
 // 获取订单流水分页列表
