@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import Avatar from '@/layouts/header/Avatar.vue';
-import Locale from '@/layouts/header/Locale.vue';
-import Notification from '@/layouts/header/Notification.vue';
 import ThemeSwitch from '@/layouts/header/ThemeSwitch.vue';
 import SearchMenu from '@/layouts/menu/MenuSearch.vue';
 import { useAppStore } from '@/stores/app';
@@ -24,9 +22,9 @@ const showSearchMenu = ref(false);
         <app-icon v-if="fullscreen" icon="icon-park-outline:off-screen-one" />
         <app-icon v-else icon="icon-park-outline:full-screen-one" />
       </div>
-      <Notification />
+      <!--      <Notification /> -->
       <ThemeSwitch />
-      <Locale />
+      <!--      <Locale /> -->
       <div class="wrapper" @click="settingPanelShow = true">
         <app-icon icon="icon-park-outline:setting" />
       </div>

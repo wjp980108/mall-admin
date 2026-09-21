@@ -16,5 +16,5 @@
   "breadcrumbIconShow": true,
   "tabStyle": "dynamic",
   "watermark": true,
-  "footer": true
+  "footer": false
 }
