@@ -26,16 +26,16 @@ const summaryLoading = ref(false);
 
 const summaryItems = computed(() => [
   { label: '总订单金额', amount: summary.value.net.totalAmount, colorClass: 'text-[var(--el-color-primary)]' },
+  { label: '付款总金额', amount: summary.value.totalPaymentAmount, colorClass: 'text-[var(--el-color-primary)]' },
   { label: '回款总金额', amount: summary.value.totalReceiptAmount, colorClass: 'text-[var(--el-color-success)]' },
-  { label: '站长服务费', amount: summary.value.stationServiceFee, colorClass: 'text-[var(--el-color-warning)]' },
-  { label: '技术服务费', amount: summary.value.techServiceFee, colorClass: 'text-[var(--el-color-warning)]' },
   { label: '销售奖', amount: summary.value.salesAward, colorClass: 'text-[var(--el-color-warning)]' },
+  { label: '技术服务费', amount: summary.value.techServiceFee, colorClass: 'text-[var(--el-color-warning)]' },
+  { label: '站长服务费', amount: summary.value.stationServiceFee, colorClass: 'text-[var(--el-color-warning)]' },
   {
     label: '订单利润差',
     amount: summary.value.orderProfitDiff,
     colorClass: summary.value.orderProfitDiff < 0 ? 'text-[var(--el-color-danger)]' : 'text-[var(--el-color-primary)]',
   },
-  { label: '付款总金额', amount: summary.value.totalPaymentAmount, colorClass: 'text-[var(--el-color-primary)]' },
 ]);
 
 function renderAmount(amount: number, colorClass: string) {
