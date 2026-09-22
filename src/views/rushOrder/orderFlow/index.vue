@@ -78,7 +78,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
         </div>
       ),
     },
-    { type: 'dateTime', prop: 'eventTime', label: '购买时间', minWidth: 180 },
+    { type: 'dateTime', prop: 'orderCreateTime', label: '购买时间', minWidth: 180 },
     {
       label: '购买用户',
       minWidth: 160,
@@ -144,7 +144,7 @@ async function getSummary() {
   summaryLoading.value = true;
   try {
     const { data } = await fetchRobOrderFlowSummary({
-      timeRange: params.value.timeRange.filter(Boolean).join(',') || undefined,
+      timeRange: params.value.timeRange,
     });
     summary.value = data;
   }

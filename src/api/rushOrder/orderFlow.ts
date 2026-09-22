@@ -5,6 +5,7 @@ export interface RobOrderFlowItem {
   eventType: 1 | 2 | 3;
   eventTypeName: string;
   eventTime: string;
+  orderCreateTime: string;
   orderId: number;
   orderNo: string;
   goodsId: number;
@@ -83,7 +84,7 @@ export interface RobOrderFlowDetail {
 }
 
 export interface RobOrderFlowSummaryParams {
-  timeRange?: string;
+  timeRange?: [string, string];
 }
 
 export interface RobOrderFlowSummary {
