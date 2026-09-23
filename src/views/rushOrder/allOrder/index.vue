@@ -1,6 +1,8 @@
 <script setup lang="tsx">
+import type { TableInstance } from 'element-plus';
 import type {
   InsufficientPointsUser,
+  RobOrderBatchInsufficient,
   RobOrderItem,
   RobOrderOperationData,
   UserOption,
@@ -13,7 +15,6 @@ import {
   transferRobOrder,
 } from '@/api/rushOrder/allOrder';
 import { useTable } from '@/components';
-import { useConfirm } from '@/hooks/useConfirm';
 import { moneyThousand } from '@/utils/money';
 
 defineOptions({ name: 'RushOrderAllOrder' });
@@ -49,9 +50,15 @@ const { tableProps, params, resetParams, getTableData } = useTable({
   isPagination: true,
   columns: () => [
     {
+      type: 'selection',
+      width: 52,
+      fixed: 'left',
+      selectable: row => isOrderSelectable(row),
+    },
+    {
       prop: 'orderNo',
       label: '订单',
-      minWidth: 180,
+      minWidth: 200,
       fixed: 'left',
       renderContent: ({ row }) => (
         <div>
@@ -180,13 +187,15 @@ const { tableProps, params, resetParams, getTableData } = useTable({
           label: '确认收款',
           icon: 'CircleCheck',
           show: ({ row }) => row.orderStatus === 1 && row.payStatus === 0,
-          onClick: ({ row }) => handleConfirmPay(row, 1),
+          auth: 'system:allOrder:confirmReceive',
+          onClick: ({ row }) => handleConfirmPay([row.id], 1),
         },
         {
           label: '确认回款',
           icon: 'CircleCheck',
           show: ({ row }) => row.orderStatus === 1 && row.payStatus === 1,
-          onClick: ({ row }) => handleConfirmPay(row, 2),
+          auth: 'system:allOrder:confirmPayback',
+          onClick: ({ row }) => handleConfirmPay([row.id], 2),
         },
         {
           label: '转移订单',
@@ -201,11 +210,25 @@ const { tableProps, params, resetParams, getTableData } = useTable({
           icon: 'CircleClose',
           show: ({ row }) => row.orderStatus === 1 && (row.payStatus === 0 || row.payStatus === 1),
           auth: 'system:allOrder:cancel',
-          onClick: ({ row }) => handleCancel(row),
+          onClick: ({ row }) => handleCancel([row]),
         },
       ],
     },
   ],
+});
+
+const orderTableRef = useTemplateRef<TableInstance>('orderTableRef');
+const selectedRows = ref<RobOrderItem[]>([]);
+const canConfirmReceipt = computed(() => selectedRows.value.length > 0
+  && selectedRows.value.every(row => row.orderStatus === 1 && row.payStatus === 0));
+const canConfirmPayback = computed(() => selectedRows.value.length > 0
+  && selectedRows.value.every(row => row.orderStatus === 1 && row.payStatus === 1));
+const canCancel = computed(() => selectedRows.value.length > 0
+  && selectedRows.value.every(row => row.orderStatus === 1 && (row.payStatus === 0 || row.payStatus === 1)));
+
+watch(() => tableProps.value.data, () => {
+  selectedRows.value = [];
+  orderTableRef.value?.clearSelection();
 });
 
 const userOptions = ref<UserOption[]>([]);
@@ -225,7 +248,7 @@ async function confirmInsufficientPoints(users: InsufficientPointsUser[], messag
 
   try {
     await ElMessageBox.confirm(
-      <div class="text-14 leading-6">
+      <div class="text-14 leading-24">
         <p>{message}</p>
         {insufficientUsers.length > 0 && (
           <el-descriptions class="mt-12" column={1} size="small" border>
@@ -282,9 +305,82 @@ async function executeOrderOperation(
   }
 }
 
-async function handleCancel(row: RobOrderItem) {
+function isOrderSelectable(row: RobOrderItem) {
+  return row.orderStatus === 1 && (row.payStatus === 0 || row.payStatus === 1);
+}
+
+function getOrderRowClassName({ row }: { row: RobOrderItem }) {
+  return isOrderSelectable(row) ? 'cursor-pointer' : '';
+}
+
+function handleSelectionChange(rows: RobOrderItem[]) {
+  selectedRows.value = rows;
+}
+
+function handleOrderRowClick(row: RobOrderItem, _column: unknown, event: MouseEvent) {
+  if (!isOrderSelectable(row))
+    return;
+
+  const target = event.target;
+  if (target instanceof Element && target.closest('.app-table-operation-column, .el-checkbox, .el-image, button, a, input, label, select, textarea, [role="button"]'))
+    return;
+
+  orderTableRef.value?.toggleRowSelection(row);
+}
+
+async function confirmBatchInsufficientPoints(
+  orders: RobOrderBatchInsufficient[],
+  rows: RobOrderItem[],
+  message: string,
+) {
+  const orderNumbers = new Map(rows.map(row => [row.id, row.orderNo]));
+
   try {
-    await ElMessageBox.confirm('是否取消该订单？', '操作提示', {
+    await ElMessageBox.confirm(
+      <div class="text-14 leading-24">
+        <p>{message}</p>
+        <div class="mt-12 max-h-240 overflow-y-auto">
+          {orders.map(order => (
+            <div key={order.orderId} class="mb-8">
+              <div class="break-all font-600">
+                订单
+                {orderNumbers.get(order.orderId) ?? order.orderId}
+              </div>
+              {order.pointsInsufficient.users?.filter(user => user.pointsInsufficient).map(user => (
+                <div key={user.userId}>
+                  {user.nickname}
+                  {' · '}
+                  {user.phone}
+                  {' · '}
+                  {user.identityName}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>,
+      '积分不足确认',
+      {
+        confirmButtonText: '仍然继续',
+        cancelButtonText: '取消',
+        type: 'warning',
+        draggable: true,
+      },
+    );
+    return true;
+  }
+  catch {
+    return false;
+  }
+}
+
+async function handleCancel(rows: RobOrderItem[]) {
+  const orderIds = rows.map(row => row.id);
+  if (!orderIds.length)
+    return;
+
+  try {
+    await ElMessageBox.confirm(`是否取消选中的 ${orderIds.length} 笔订单？`, '操作提示', {
       confirmButtonText: '确认',
       cancelButtonText: '取消',
       type: 'warning',
@@ -295,19 +391,46 @@ async function handleCancel(row: RobOrderItem) {
     return;
   }
 
-  const completed = await executeOrderOperation(confirmInsufficient => cancelRobOrder({
-    orderId: row.id,
-    confirmInsufficient,
-  }));
-
-  if (completed)
+  try {
+    let result = await cancelRobOrder({ orderIds });
+    if (result.data !== null) {
+      if (!await confirmBatchInsufficientPoints(result.data, rows, result.msg))
+        return;
+      result = await cancelRobOrder({ orderIds, confirmInsufficient: true });
+    }
+    ElMessage.success(result.msg);
     await getTableData();
+  }
+  catch (error) {
+    ElMessage.error(getErrorMessage(error));
+  }
 }
 
-async function handleConfirmPay(row: RobOrderItem, action: 1 | 2) {
+async function handleConfirmPay(orderIds: number[], action: 1 | 2) {
+  if (!orderIds.length)
+    return;
+
   const actionName = action === 1 ? '确认收款' : '确认回款';
-  await useConfirm(confirmRobOrderPay, { orderId: row.id, action }, actionName);
-  await getTableData();
+  try {
+    await ElMessageBox.confirm(`是否对选中的 ${orderIds.length} 笔订单${actionName}？`, '操作提示', {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+      draggable: true,
+    });
+  }
+  catch {
+    return;
+  }
+
+  try {
+    const result = await confirmRobOrderPay({ orderIds, action });
+    ElMessage.success(result.msg);
+    await getTableData();
+  }
+  catch {
+    // 请求层已经显示错误提示
+  }
 }
 
 async function openTransfer(row: RobOrderItem) {
@@ -371,9 +494,45 @@ async function handleTransfer() {
             <el-option label="已取消" :value="2" />
           </el-select>
         </app-form-item>
+        <app-form-item label="收款/回款状态">
+          <el-select v-model="params.payStatus" clearable placeholder="请选择状态">
+            <el-option label="未收款" :value="0" />
+            <el-option label="已收款" :value="1" />
+            <el-option label="已回款" :value="2" />
+            <el-option label="无效" :value="3" />
+          </el-select>
+        </app-form-item>
       </app-form>
     </app-card>
-    <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="getTableData" />
+    <app-table
+      ref="orderTableRef" v-bind="tableProps" :data="tableProps.data" card
+      :row-class-name="getOrderRowClassName"
+      @refresh="getTableData" @selection-change="handleSelectionChange" @row-click="handleOrderRowClick"
+    >
+      <template #button>
+        <span v-if="selectedRows.length" class="text-14 text-[var(--el-text-color-secondary)]">
+          已选 {{ selectedRows.length }} 笔
+        </span>
+        <el-button
+          v-auth="'system:allOrder:confirmReceive'" type="primary" plain :disabled="!canConfirmReceipt"
+          @click="handleConfirmPay(selectedRows.map(row => row.id), 1)"
+        >
+          批量确认收款
+        </el-button>
+        <el-button
+          v-auth="'system:allOrder:confirmPayback'" type="primary" plain :disabled="!canConfirmPayback"
+          @click="handleConfirmPay(selectedRows.map(row => row.id), 2)"
+        >
+          批量确认回款
+        </el-button>
+        <el-button
+          v-auth="'system:allOrder:cancel'" type="primary" plain :disabled="!canCancel"
+          @click="handleCancel([...selectedRows])"
+        >
+          批量取消订单
+        </el-button>
+      </template>
+    </app-table>
 
     <app-popup
       v-model="transferVisible" title="转移订单" confirm-text="确认转移" width="450"

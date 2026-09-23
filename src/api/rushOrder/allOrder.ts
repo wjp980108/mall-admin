@@ -1,7 +1,5 @@
 import request from '@/utils/axios';
 
-const ROB_ORDER_API = '/api/robOrders';
-
 export interface RobOrderItem {
   id: number;
   orderNo: string;
@@ -52,13 +50,13 @@ export interface RobOrderTransferForm {
 }
 
 export interface RobOrderCancelForm {
-  orderId: number;
+  orderIds: number[];
   /** 积分不足时管理员确认仍继续执行 */
   confirmInsufficient?: boolean;
 }
 
 export interface RobOrderConfirmPayForm {
-  orderId: number;
+  orderIds: number[];
   /** 动作：1 确认收款、2 确认回款 */
   action: 1 | 2;
 }
@@ -77,6 +75,11 @@ export interface RobOrderOperationData {
   users?: InsufficientPointsUser[];
 }
 
+export interface RobOrderBatchInsufficient {
+  orderId: number;
+  pointsInsufficient: RobOrderOperationData;
+}
+
 export interface UserOption {
   label: string;
   value: number;
@@ -85,7 +88,7 @@ export interface UserOption {
 // 获取抢购订单分页列表
 export function fetchRobOrderList(params: RobOrderListParams) {
   return request<AppAxios.PageData<RobOrderItem>>({
-    url: ROB_ORDER_API,
+    url: '/api/robOrders',
     params,
   });
 }
@@ -100,7 +103,7 @@ export function fetchUserOptions() {
 // 转移订单
 export function transferRobOrder(data: RobOrderTransferForm) {
   return request<RobOrderOperationData | null>({
-    url: `${ROB_ORDER_API}/transfer`,
+    url: '/api/robOrders/transfer',
     method: 'put',
     data,
   }, {
@@ -112,8 +115,8 @@ export function transferRobOrder(data: RobOrderTransferForm) {
 
 // 取消订单
 export function cancelRobOrder(data: RobOrderCancelForm) {
-  return request<RobOrderOperationData | null>({
-    url: `${ROB_ORDER_API}/cancel`,
+  return request<RobOrderBatchInsufficient[] | null>({
+    url: '/api/robOrders/cancel',
     method: 'put',
     data,
   }, {
@@ -126,7 +129,7 @@ export function cancelRobOrder(data: RobOrderCancelForm) {
 // 确认收款/回款
 export function confirmRobOrderPay(data: RobOrderConfirmPayForm) {
   return request({
-    url: `${ROB_ORDER_API}/confirmPay`,
+    url: '/api/robOrders/confirmPay',
     method: 'put',
     data,
   }, {
